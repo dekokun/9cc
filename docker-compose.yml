@@ -1,0 +1,7 @@
+version: '3'
+services:
+  9cc:
+    build: .
+    volumes:
+      - ./:/tmp/
+
