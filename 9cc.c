@@ -52,7 +52,7 @@ void tokenize(char *p) {
       p++;
       continue;
     }
-    if (*p == '+' || *p == '-') {
+    if (*p == '+' || *p == '-' || *p == '*') {
       tokens[i].ty = *p;
       tokens[i].input = p;
       i++;
@@ -106,6 +106,10 @@ Node *mul() {
   Node *lhs = term();
   if (tokens[pos].ty == TK_EOF || tokens[pos].ty == '+' || tokens[pos].ty == '-')
     return lhs;
+  if (tokens[pos].ty == ('*')) {
+    pos++;
+    return new_node('*', lhs, mul());
+  }
   error("mul: 想定しないトークンです: %s",
     tokens[pos].input);
 }
@@ -136,6 +140,9 @@ void gen(Node *node) {
     break;
   case '-':
     printf("  sub rax, rdi\n");
+    break;
+  case '*':
+    printf("  mul rdi\n");
     break;
   }
 
