@@ -9,5 +9,6 @@ before_install:
 services:
   - docker
 script:
+  - docker-compose build
   - make test
 
