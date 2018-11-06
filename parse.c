@@ -125,8 +125,8 @@ Node *new_node_num(int val) {
 
 void node_debug(Node *node) {
     printf("ty: %d\n", node->ty);
-    printf("lhs: %s\n", node->lhs);
-    printf("rhs: %s\n", node->rhs);
+    printf("lhs: %s\n", node->lhs == NULL ? "NULL" : "lhs node");
+    printf("rhs: %s\n", node->rhs == NULL ? "NULL" : "rhs node");
 }
 
 Node *new_node_ident(int val) {
