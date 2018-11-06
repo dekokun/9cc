@@ -43,6 +43,12 @@ Node *new_node_num(int val) {
   return node;
 }
 
+void node_debug(Node *node) {
+    printf("ty: %d\n", node->ty);
+    printf("lhs: %s\n", node->lhs);
+    printf("rhs: %s\n", node->rhs);
+}
+
 // トークナイズした結果のトークン列はこの配列に保存する
 Token tokens[100];
 void tokenize(char *p) {
