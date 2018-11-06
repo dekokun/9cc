@@ -30,4 +30,4 @@ extern Node *code[];
 
 void gen();
 void program();
-__attribute__((noreturn)) static void error(char *fmt, ...);
+__attribute__((noreturn)) void error(char *fmt, ...);

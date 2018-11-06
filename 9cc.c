@@ -46,7 +46,7 @@ void tokenize(char *p) {
   tokens[i].input = p;
 }
 // エラーを報告するための関数
-__attribute__((noreturn)) static void error(char *fmt, ...) {
+__attribute__((noreturn)) void error(char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
   vfprintf(stderr, fmt, ap);
