@@ -25,9 +25,27 @@ typedef struct Node {
   char name;        // tyがND_IDENTの場合のみ使う
 } Node;
 
+typedef struct {
+  void **data;
+  int capacity;
+  int len;
+} Vector;
+
+typedef struct {
+  Vector *keys;
+  Vector *vals;
+} Map;
+
 extern Token tokens[];
 extern Node *code[];
 
 void gen();
 void program();
 __attribute__((noreturn)) void error(char *fmt, ...);
+
+void runtest();
+Vector *new_vector();
+void vec_push(Vector *vec, void *elem);
+Map *new_map();
+void map_put(Map *map, char *key, void *val);
+void *map_get(Map *map, char *key);
