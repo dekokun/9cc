@@ -44,8 +44,6 @@ Node *assign() {
 
 }
 Node *assign_() {
-  if (tokens[pos].ty == TK_EOF || tokens[pos].ty == ';')
-    return NULL;
   if (tokens[pos].ty == '=') {
     pos++;
     Node *node_expr = expr();
@@ -54,14 +52,11 @@ Node *assign_() {
       return node_expr;
     return new_node('=', node_expr, node_assign_);
   }
-  error("assign_: 想定しないトークンです: %s",
-    tokens[pos].input);
+  return NULL;
 }
 
 Node *expr() {
   Node *lhs = mul();
-  if (tokens[pos].ty == TK_EOF || tokens[pos].ty == ')' || tokens[pos].ty == ';' || tokens[pos].ty == '=')
-    return lhs;
   if (tokens[pos].ty == '+') {
     pos++;
     return new_node('+', lhs, expr());
@@ -70,14 +65,11 @@ Node *expr() {
     pos++;
     return new_node('-', lhs, expr());
   }
-  error("expr: 想定しないトークンです: %s",
-    tokens[pos].input);
+  return lhs;
 }
 
 Node *mul() {
   Node *lhs = term();
-  if (tokens[pos].ty == TK_EOF || tokens[pos].ty == '+' || tokens[pos].ty == '-' || tokens[pos].ty == ')' || tokens[pos].ty == ';' || tokens[pos].ty == '=')
-    return lhs;
   if (tokens[pos].ty == ('*')) {
     pos++;
     return new_node('*', lhs, mul());
@@ -86,8 +78,7 @@ Node *mul() {
     pos++;
     return new_node('/', lhs, mul());
   }
-  error("mul: 想定しないトークンです: %s",
-    tokens[pos].input);
+  return lhs;
 }
 
 Node *term() {
