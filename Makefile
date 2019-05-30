@@ -1,3 +1,6 @@
+install:
+	docker build -t 9cc .
+
 build:
 	docker run -v $(shell pwd):/tmp/ 9cc bash -c "cd /tmp/; make -f docker.mk 9cc"
 
