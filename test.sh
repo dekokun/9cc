@@ -1,4 +1,13 @@
 #!/bin/bash
+
+verbose=
+
+case "$1" in
+-v|--v|--ve|--ver|--verb|--verbo|--verbos|--verbose)
+    verbose=1
+    shift ;;
+esac
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m'
@@ -22,14 +31,20 @@ try() {
 try_fail() {
   input="$1"
 
-  ./9cc "$input" > /dev/null 2>/dev/null
+  output=$(./9cc "$input" 2>&1)
   result="$?"
 
   if [ "$result" == "0" ]; then
-    echo -e $RED"not failed: $input"$NC
+    echo -e $RED"not failed: $input."$NC
+    if [ "$verbose" = 1 ]; then
+        echo output: $output
+    fi
     exit 1
   else
     echo -e $GREEN"$input failed as expected."$NC
+    if [ "$verbose" = 1 ]; then
+        echo output: $output
+    fi
   fi
 }
 

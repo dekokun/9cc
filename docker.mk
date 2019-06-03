@@ -10,5 +10,9 @@ test: 9cc
 	./9cc -test
 	./test.sh
 
+test-verbose: 9cc
+	./9cc -test
+	./test.sh -v
+
 clean:
 	rm -f 9cc *.o *~ tmp*
