@@ -43,7 +43,7 @@ Node *assign() {
   Node *node_expr = expr();
   Node *node_assign_ = assign_();
   if (!consume(';'))
-    error(";で文が終わってない: %s", tokens[pos].input);
+    error_at(tokens[pos].input, ";で文が終わってない");
   if (node_assign_ == NULL)
     return node_expr;
   return new_node('=', node_expr, node_assign_);
@@ -58,7 +58,7 @@ Node *assign_() {
       return node_expr;
     return new_node('=', node_expr, node_assign_);
   }
-  error("assign_: 想定しないトークンです: %s", tokens[pos].input);
+  error_at(tokens[pos].input, "assign_: 想定しないトークンです");
 }
 
 Node *expr() {
@@ -72,7 +72,7 @@ Node *expr() {
   if (consume('-')) {
     return new_node('-', lhs, expr());
   }
-  error("expr: 想定しないトークンです: %s", tokens[pos].input);
+  error_at(tokens[pos].input, "expr: 想定しないトークンです");
 }
 
 Node *mul() {
@@ -87,7 +87,7 @@ Node *mul() {
   if (consume('/')) {
     return new_node('/', lhs, mul());
   }
-  error("mul: 想定しないトークンです: %s", tokens[pos].input);
+  error_at(tokens[pos].input, "mul: 想定しないトークンです");
 }
 
 Node *term() {
@@ -98,12 +98,10 @@ Node *term() {
   if (consume('(')) {
     Node *node = expr();
     if (!consume(')'))
-      error("開き括弧と閉じ括弧の対応がついてないです: %s", tokens[pos].input);
+      error_at(tokens[pos].input, "開き括弧と閉じ括弧の対応がついてないです");
     return node;
   }
-  error("数値でも開きカッコでもないトークンです: %s",
-
-        tokens[pos].input);
+  error_at(tokens[pos].input, "数値でも開きカッコでもないトークンです");
 }
 
 Node *new_node(int op, Node *lhs, Node *rhs) {

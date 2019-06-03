@@ -42,6 +42,7 @@ extern Node *code[];
 void gen();
 void program();
 __attribute__((noreturn)) void error(char *fmt, ...);
+__attribute__((noreturn)) void error_at(char *loc, char *msg);
 
 void runtest();
 Vector *new_vector();
