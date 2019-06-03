@@ -15,6 +15,13 @@ Node *new_node(int op, Node *lhs, Node *rhs);
 int pos = 0;
 int code_pos = 0;
 
+int consume(int ty) {
+  if (tokens[pos].ty != ty)
+    return 0;
+  pos++;
+  return 1;
+}
+
 void program() {
   Node *node_assign = assign();
   code[code_pos] = node_assign;
@@ -45,8 +52,7 @@ Node *assign() {
 Node *assign_() {
   if (tokens[pos].ty == TK_EOF || tokens[pos].ty == ';')
     return NULL;
-  if (tokens[pos].ty == '=') {
-    pos++;
+  if (consume('=')) {
     Node *node_expr = expr();
     Node *node_assign_ = assign_();
     if (node_assign_ == NULL)
@@ -61,12 +67,10 @@ Node *expr() {
   if (tokens[pos].ty == TK_EOF || tokens[pos].ty == ')' ||
       tokens[pos].ty == ';' || tokens[pos].ty == '=')
     return lhs;
-  if (tokens[pos].ty == '+') {
-    pos++;
+  if (consume('+')) {
     return new_node('+', lhs, expr());
   }
-  if (tokens[pos].ty == '-') {
-    pos++;
+  if (consume('-')) {
     return new_node('-', lhs, expr());
   }
   error("expr: 想定しないトークンです: %s", tokens[pos].input);
@@ -78,12 +82,10 @@ Node *mul() {
       tokens[pos].ty == '-' || tokens[pos].ty == ')' || tokens[pos].ty == ';' ||
       tokens[pos].ty == '=')
     return lhs;
-  if (tokens[pos].ty == ('*')) {
-    pos++;
+  if (consume('*')) {
     return new_node('*', lhs, mul());
   }
-  if (tokens[pos].ty == ('/')) {
-    pos++;
+  if (consume('/')) {
     return new_node('/', lhs, mul());
   }
   error("mul: 想定しないトークンです: %s", tokens[pos].input);
@@ -94,8 +96,7 @@ Node *term() {
     return new_node_num(tokens[pos++].val);
   if (tokens[pos].ty == TK_IDENT)
     return new_node_ident(tokens[pos++].val);
-  if (tokens[pos].ty == '(') {
-    pos++;
+  if (consume('(')) {
     Node *node = expr();
     if (tokens[pos].ty != ')')
       error("開き括弧と閉じ括弧の対応がついてないです: %s", tokens[pos].input);
