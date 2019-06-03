@@ -10,6 +10,7 @@
 // トークナイズした結果のトークン列はこの配列に保存する
 Token tokens[100];
 Node *code[100];
+char user_input;
 
 void tokenize(char *p) {
   int i = 0;
@@ -39,8 +40,7 @@ void tokenize(char *p) {
       i++;
       continue;
     }
-    fprintf(stderr, "トークナイズできません: %s\n", p);
-    exit(1);
+    error_at(p, "トークナイズできません);
   }
   tokens[i].ty = TK_EOF;
   tokens[i].input = p;
@@ -54,6 +54,15 @@ __attribute__((noreturn)) void error(char *fmt, ...) {
   exit(1);
 }
 
+void error_at(char *loc, char *msg) {
+  int pos = loc - user_input;
+  fprintf(stderr, "%s\n", user_input);
+  fprintf(stderr, "%*s", pos, ""); // pos個の空白を出力
+  fprintf(stderr, "^ %s\n", msg);
+  exit(1);
+}
+
+
 int main(int argc, char **argv) {
   if (argc != 2) {
     fprintf(stderr, "引数の個数が正しくありません\n");
@@ -64,7 +73,8 @@ int main(int argc, char **argv) {
     runtest();
     return 0;
   }
-  tokenize(argv[1]);
+  user_input = argv[1];
+  tokenize(user_input);
   program();
 
   printf(".intel_syntax noprefix\n");
