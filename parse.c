@@ -42,9 +42,8 @@ void program_() {
 Node *assign() {
   Node *node_expr = expr();
   Node *node_assign_ = assign_();
-  if (tokens[pos].ty != ';')
+  if (!consume(';'))
     error(";で文が終わってない: %s", tokens[pos].input);
-  pos++;
   if (node_assign_ == NULL)
     return node_expr;
   return new_node('=', node_expr, node_assign_);
@@ -98,9 +97,8 @@ Node *term() {
     return new_node_ident(tokens[pos++].val);
   if (consume('(')) {
     Node *node = expr();
-    if (tokens[pos].ty != ')')
+    if (!consume(')'))
       error("開き括弧と閉じ括弧の対応がついてないです: %s", tokens[pos].input);
-    pos++;
     return node;
   }
   error("数値でも開きカッコでもないトークンです: %s",
