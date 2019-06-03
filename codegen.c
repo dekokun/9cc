@@ -56,5 +56,4 @@ void gen(Node *node) {
   }
 
   printf("  push rax\n");
-
 }

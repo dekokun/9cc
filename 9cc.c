@@ -5,8 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-
 // トークナイズした結果のトークン列はこの配列に保存する
 Token tokens[100];
 Node *code[100];
@@ -14,7 +12,7 @@ char user_input;
 
 void tokenize(char *p) {
   int i = 0;
-  while(*p) {
+  while (*p) {
     if (isspace(*p)) {
       p++;
       continue;
@@ -26,7 +24,8 @@ void tokenize(char *p) {
       p++;
       continue;
     }
-    if (*p == '+' || *p == '-' || *p == '*' || *p == '/' || *p == '(' || *p == ')' || *p == '=' || *p == ';') {
+    if (*p == '+' || *p == '-' || *p == '*' || *p == '/' || *p == '(' ||
+        *p == ')' || *p == '=' || *p == ';') {
       tokens[i].ty = *p;
       tokens[i].input = p;
       i++;
@@ -61,7 +60,6 @@ void error_at(char *loc, char *msg) {
   fprintf(stderr, "^ %s\n", msg);
   exit(1);
 }
-
 
 int main(int argc, char **argv) {
   if (argc != 2) {

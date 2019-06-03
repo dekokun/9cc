@@ -33,15 +33,14 @@ void program_() {
 }
 
 Node *assign() {
-  Node *node_expr= expr();
-  Node *node_assign_= assign_();
+  Node *node_expr = expr();
+  Node *node_assign_ = assign_();
   if (tokens[pos].ty != ';')
     error(";で文が終わってない: %s", tokens[pos].input);
   pos++;
   if (node_assign_ == NULL)
     return node_expr;
   return new_node('=', node_expr, node_assign_);
-
 }
 Node *assign_() {
   if (tokens[pos].ty == TK_EOF || tokens[pos].ty == ';')
@@ -54,13 +53,13 @@ Node *assign_() {
       return node_expr;
     return new_node('=', node_expr, node_assign_);
   }
-  error("assign_: 想定しないトークンです: %s",
-    tokens[pos].input);
+  error("assign_: 想定しないトークンです: %s", tokens[pos].input);
 }
 
 Node *expr() {
   Node *lhs = mul();
-  if (tokens[pos].ty == TK_EOF || tokens[pos].ty == ')' || tokens[pos].ty == ';' || tokens[pos].ty == '=')
+  if (tokens[pos].ty == TK_EOF || tokens[pos].ty == ')' ||
+      tokens[pos].ty == ';' || tokens[pos].ty == '=')
     return lhs;
   if (tokens[pos].ty == '+') {
     pos++;
@@ -70,13 +69,14 @@ Node *expr() {
     pos++;
     return new_node('-', lhs, expr());
   }
-  error("expr: 想定しないトークンです: %s",
-    tokens[pos].input);
+  error("expr: 想定しないトークンです: %s", tokens[pos].input);
 }
 
 Node *mul() {
   Node *lhs = term();
-  if (tokens[pos].ty == TK_EOF || tokens[pos].ty == '+' || tokens[pos].ty == '-' || tokens[pos].ty == ')' || tokens[pos].ty == ';' || tokens[pos].ty == '=')
+  if (tokens[pos].ty == TK_EOF || tokens[pos].ty == '+' ||
+      tokens[pos].ty == '-' || tokens[pos].ty == ')' || tokens[pos].ty == ';' ||
+      tokens[pos].ty == '=')
     return lhs;
   if (tokens[pos].ty == ('*')) {
     pos++;
@@ -86,8 +86,7 @@ Node *mul() {
     pos++;
     return new_node('/', lhs, mul());
   }
-  error("mul: 想定しないトークンです: %s",
-    tokens[pos].input);
+  error("mul: 想定しないトークンです: %s", tokens[pos].input);
 }
 
 Node *term() {
@@ -105,7 +104,7 @@ Node *term() {
   }
   error("数値でも開きカッコでもないトークンです: %s",
 
-    tokens[pos].input);
+        tokens[pos].input);
 }
 
 Node *new_node(int op, Node *lhs, Node *rhs) {
@@ -124,11 +123,11 @@ Node *new_node_num(int val) {
 }
 
 void node_debug(Node *node) {
-    printf("ty: %d\n", node->ty);
-    printf("lhs: %s\n", node->lhs == NULL ? "NULL" : "lhs node");
-    printf("rhs: %s\n", node->rhs == NULL ? "NULL" : "rhs node");
-    printf("val: %d\n", node->val);
-    printf("name: %c\n", node->name);
+  printf("ty: %d\n", node->ty);
+  printf("lhs: %s\n", node->lhs == NULL ? "NULL" : "lhs node");
+  printf("rhs: %s\n", node->rhs == NULL ? "NULL" : "rhs node");
+  printf("val: %d\n", node->val);
+  printf("name: %c\n", node->name);
 }
 
 Node *new_node_ident(int val) {
