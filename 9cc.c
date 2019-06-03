@@ -8,7 +8,15 @@
 // トークナイズした結果のトークン列はこの配列に保存する
 Token tokens[100];
 Node *code[100];
-char user_input;
+char *user_input;
+
+void error_at(char *loc, char *msg) {
+  int pos = loc - user_input;
+  fprintf(stderr, "%s\n", user_input);
+  fprintf(stderr, "%*s", pos, ""); // pos個の空白を出力
+  fprintf(stderr, "^ %s\n", msg);
+  exit(1);
+}
 
 void tokenize(char *p) {
   int i = 0;
@@ -39,7 +47,7 @@ void tokenize(char *p) {
       i++;
       continue;
     }
-    error_at(p, "トークナイズできません);
+    error_at(p, "トークナイズできません");
   }
   tokens[i].ty = TK_EOF;
   tokens[i].input = p;
@@ -50,14 +58,6 @@ __attribute__((noreturn)) void error(char *fmt, ...) {
   va_start(ap, fmt);
   vfprintf(stderr, fmt, ap);
   fprintf(stderr, "\n");
-  exit(1);
-}
-
-void error_at(char *loc, char *msg) {
-  int pos = loc - user_input;
-  fprintf(stderr, "%s\n", user_input);
-  fprintf(stderr, "%*s", pos, ""); // pos個の空白を出力
-  fprintf(stderr, "^ %s\n", msg);
   exit(1);
 }
 
