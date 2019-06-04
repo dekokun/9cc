@@ -3,6 +3,9 @@
 #include <stdlib.h>
 
 Node *expr();
+Node *equality();
+Node *add();
+Node *relational();
 Node *unary();
 Node *mul();
 Node *term();
@@ -62,33 +65,54 @@ Node *assign_() {
   error_at(tokens[pos].input, "assign_: 想定しないトークンです");
 }
 
-Node *expr() {
+Node *expr() { return equality(); }
+
+Node *equality() {
+  Node *lhs = relational();
+  if (consume(TK_EQ)) {
+    return new_node(ND_EQ, lhs, relational());
+  }
+  if (consume(TK_NE)) {
+    return new_node(ND_NE, lhs, relational());
+  }
+  return lhs;
+}
+Node *relational() {
+  Node *lhs = add();
+  if (consume(TK_LT)) {
+    return new_node(ND_LT, lhs, add());
+  }
+  if (consume(TK_GT)) {
+    return new_node(ND_LT, add(), lhs);
+  }
+  if (consume(TK_LE)) {
+    return new_node(ND_LE, lhs, add());
+  }
+  if (consume(TK_GE)) {
+    return new_node(ND_LE, add(), lhs);
+  }
+  return lhs;
+}
+Node *add() {
   Node *lhs = mul();
-  if (tokens[pos].ty == TK_EOF || tokens[pos].ty == ')' ||
-      tokens[pos].ty == ';' || tokens[pos].ty == '=')
-    return lhs;
   if (consume('+')) {
     return new_node('+', lhs, expr());
   }
   if (consume('-')) {
     return new_node('-', lhs, expr());
   }
-  error_at(tokens[pos].input, "expr: 想定しないトークンです");
+  return lhs;
 }
 
 Node *mul() {
   Node *lhs = unary();
-  if (tokens[pos].ty == TK_EOF || tokens[pos].ty == '+' ||
-      tokens[pos].ty == '-' || tokens[pos].ty == ')' || tokens[pos].ty == ';' ||
-      tokens[pos].ty == '=')
-    return lhs;
   if (consume('*')) {
     return new_node('*', lhs, mul());
   }
   if (consume('/')) {
     return new_node('/', lhs, mul());
   }
-  error_at(tokens[pos].input, "mul: 想定しないトークンです");
+  return lhs;
 }
 
 Node *unary() {
