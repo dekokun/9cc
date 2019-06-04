@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 Node *expr();
+Node *unary();
 Node *mul();
 Node *term();
 void program_();
@@ -75,16 +76,6 @@ Node *expr() {
   error_at(tokens[pos].input, "expr: 想定しないトークンです");
 }
 
-Node *unary() {
-  if (consume('+')) {
-    return term();
-  }
-  if (consume('-')) {
-    return new_node('-', new_node_num(0), term());
-  }
-  return term();
-}
-
 Node *mul() {
   Node *lhs = unary();
   if (tokens[pos].ty == TK_EOF || tokens[pos].ty == '+' ||
@@ -98,6 +89,16 @@ Node *mul() {
     return new_node('/', lhs, mul());
   }
   error_at(tokens[pos].input, "mul: 想定しないトークンです");
+}
+
+Node *unary() {
+  if (consume('+')) {
+    return term();
+  }
+  if (consume('-')) {
+    return new_node('-', new_node_num(0), term());
+  }
+  return term();
 }
 
 Node *term() {
