@@ -27,7 +27,7 @@ enum {
   ND_LT, // less than
 };
 
-typedef struct Node {
+typedef struct Node { // 宣言の中でNodeを使ってるのでタグ名Nodeが必要
   int ty;
   struct Node *lhs;
   struct Node *rhs;
