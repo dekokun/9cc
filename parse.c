@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+Node *stmt();
 Node *expr();
 Node *equality();
 Node *add();
@@ -17,7 +18,6 @@ Node *new_node_num(int val);
 Node *new_node(int op, Node *lhs, Node *rhs);
 
 int pos = 0;
-int code_pos = 0;
 
 int consume(int ty) {
   if (tokens[pos].ty != ty)
@@ -27,45 +27,28 @@ int consume(int ty) {
 }
 
 void program() {
-  Node *node_assign = assign();
-  code[code_pos] = node_assign;
-  code_pos++;
-  program_();
-  code[code_pos] = NULL;
+  int i = 0;
+  while (tokens[pos].ty != TK_EOF)
+    code[i++] = stmt();
+  code[i] = NULL;
 }
 
-void program_() {
-  if (tokens[pos].ty == TK_EOF)
-    return;
-  Node *node_assign = assign();
-  code[code_pos] = node_assign;
-  code_pos++;
-  program_();
+Node *stmt() {
+  Node *node = expr();
+  if (!consume(';')) {
+    error_at(tokens[pos].input, "':'ではないトークンです");
+  }
+  return node;
 }
+Node *expr() { return assign(); }
 
 Node *assign() {
-  Node *node_expr = expr();
-  Node *node_assign_ = assign_();
-  if (!consume(';'))
-    error_at(tokens[pos].input, ";で文が終わってない");
-  if (node_assign_ == NULL)
-    return node_expr;
-  return new_node('=', node_expr, node_assign_);
-}
-Node *assign_() {
-  if (tokens[pos].ty == TK_EOF || tokens[pos].ty == ';')
-    return NULL;
+  Node *lhs = equality();
   if (consume('=')) {
-    Node *node_expr = expr();
-    Node *node_assign_ = assign_();
-    if (node_assign_ == NULL)
-      return node_expr;
-    return new_node('=', node_expr, node_assign_);
+    return new_node('=', lhs, assign());
   }
-  error_at(tokens[pos].input, "assign_: 想定しないトークンです");
+  return lhs;
 }
-
-Node *expr() { return equality(); }
 
 Node *equality() {
   Node *lhs = relational();
