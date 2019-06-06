@@ -73,5 +73,7 @@ try 1 '3 > 2;'
 try_fail '();'
 try_fail '1 + (2 + );'
 try_fail '1 1;'
+try_fail '1 = 1;'
+try_fail '(a + 1) = 1;'
 
 echo OK
