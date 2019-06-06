@@ -38,13 +38,15 @@ try_fail() {
   if [ "$result" == "0" ]; then
     echo -e "${RED}not failed: $input.$NC"
     if [ "$verbose" = 1 ]; then
-      echo "output: $output"
+      echo output:
+      echo "$output"
     fi
     exit 1
   else
     echo -e "$GREEN$input failed as expected.$NC"
     if [ "$verbose" = 1 ]; then
-      echo "output: $output"
+      echo output:
+      echo "$output"
     fi
   fi
 }
