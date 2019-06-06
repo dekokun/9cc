@@ -36,7 +36,7 @@ void program() {
 Node *stmt() {
   Node *node = expr();
   if (!consume(';')) {
-    error_at(tokens[pos].input, "':'ではないトークンです");
+    error_at(tokens[pos].input, "';'ではないトークンです");
   }
   return node;
 }
