@@ -112,7 +112,7 @@ Node *term() {
   if (tokens[pos].ty == TK_NUM)
     return new_node_num(tokens[pos++].val);
   if (tokens[pos].ty == TK_IDENT)
-    return new_node_ident(tokens[pos++].val);
+    return new_node_ident(tokens[pos++].input[0]);
   if (consume('(')) {
     Node *node = expr();
     if (!consume(')'))
