@@ -2,6 +2,7 @@
 enum {
   TK_NUM = 256, // 整数
   TK_IDENT,     // 識別子
+  TK_RETURN,    // return
   TK_EOF,       // 入力の終わりを表すトークン
   TK_EQ,        // equal
   TK_NE,        // not equal
@@ -21,10 +22,11 @@ typedef struct {
 enum {
   ND_NUM = 256,
   ND_IDENT,
-  ND_EQ, // equal
-  ND_NE, // not equal
-  ND_LE, // less than or equal
-  ND_LT, // less than
+  ND_EQ,     // equal
+  ND_NE,     // not equal
+  ND_LE,     // less than or equal
+  ND_LT,     // less than
+  ND_RETURN, // return
 };
 
 typedef struct Node { // 宣言の中でNodeを使ってるのでタグ名Nodeが必要

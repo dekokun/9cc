@@ -51,8 +51,9 @@ try_fail() {
   fi
 }
 
-try 2 'a = 2; b = 3; a;'
-try 19 'a = 8; b = 5 * 6 - 8; a + b / 2;'
+try 2 'a = 2; b = 3; return a;'
+try 19 'a = 8; b = 5 * 6 - 8; return a + b / 2;'
+try 5 'return 5;return 6;'
 try 42 '42;'
 try 41 ' 12 + 34 - 5 ;'
 try 52 ' 2 + 10 * 5 ;'
