@@ -37,11 +37,17 @@ void tokenize(char *p) {
       p += 6;
       continue;
     }
-    if ('a' <= *p && *p <= 'z') {
+    if (('a' <= *p && *p <= 'z') || ('A' <= *p && *p <= 'Z')) {
+      int j = 0;
+      // 変数が何文字続くか判定
+      do {
+        j++;
+      } while (is_alnum(p[j]));
       tokens[i].ty = TK_IDENT;
       tokens[i].input = p;
+      tokens[i].name = strndup(p, j);
       i++;
-      p++;
+      p += j;
       continue;
     }
     if (strncmp(p, "==", 2) == 0) {
