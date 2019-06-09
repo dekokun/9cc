@@ -1,3 +1,4 @@
+#define _XOPEN_SOURCE 700
 // トークンの型を表す値
 enum {
   TK_NUM = 256, // 整数
