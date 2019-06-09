@@ -24,7 +24,7 @@ try() {
   if [ "$actual" == "$expected" ]; then
     echo -e "$GREEN$input => $actual$NC"
   else
-    echo -e "$RED$expected expected, but got $actual$NC"
+    echo -e "$RED$input => $expected expected, but got $actual$NC"
     exit 1
   fi
 }
