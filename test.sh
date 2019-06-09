@@ -51,6 +51,7 @@ try_fail() {
   fi
 }
 
+try 0 '_foo = 0; return _foo;'
 try 6 'foo = 1; bar = 2 + 3; return foo + bar;'
 try 6 'foo = 1; far = 2 + 3; return foo + far;'
 try 0 'return foo + bar;'

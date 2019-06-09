@@ -37,7 +37,7 @@ void tokenize(char *p) {
       p += 6;
       continue;
     }
-    if (('a' <= *p && *p <= 'z') || ('A' <= *p && *p <= 'Z')) {
+    if (('a' <= *p && *p <= 'z') || ('A' <= *p && *p <= 'Z') || *p == '_') {
       int j = 0;
       // 変数が何文字続くか判定
       do {
