@@ -9,6 +9,7 @@
 Token tokens[100];
 Node *code[100];
 char *user_input;
+Map *ident_map;
 
 void error_at(char *loc, char *msg) {
   int pos = loc - user_input;
@@ -132,6 +133,7 @@ int main(int argc, char **argv) {
     return 0;
   }
   user_input = argv[1];
+  ident_map = new_map();
   tokenize(user_input);
   program();
 

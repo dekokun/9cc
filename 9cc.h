@@ -35,8 +35,8 @@ typedef struct Node { // 宣言の中でNodeを使ってるのでタグ名Node�
   int ty;
   struct Node *lhs;
   struct Node *rhs;
-  int val;   // tyがND_NUMの場合のみ使う
-  char name; // tyがND_IDENTの場合のみ使う
+  int val;    // tyがND_NUMの場合のみ使う
+  char *name; // tyがND_IDENTの場合のみ使う
 } Node;
 
 typedef struct {
@@ -52,6 +52,7 @@ typedef struct {
 
 extern Token tokens[];
 extern Node *code[];
+extern Map *ident_map;
 
 void gen();
 void program();
