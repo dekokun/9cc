@@ -9,6 +9,7 @@
 Token tokens[100];
 Node *code[100];
 char *user_input;
+Map *ident_map;
 
 void error_at(char *loc, char *msg) {
   int pos = loc - user_input;
@@ -37,11 +38,17 @@ void tokenize(char *p) {
       p += 6;
       continue;
     }
-    if ('a' <= *p && *p <= 'z') {
+    if (('a' <= *p && *p <= 'z') || ('A' <= *p && *p <= 'Z') || *p == '_') {
+      int j = 0;
+      // 変数が何文字続くか判定
+      do {
+        j++;
+      } while (is_alnum(p[j]));
       tokens[i].ty = TK_IDENT;
       tokens[i].input = p;
+      tokens[i].name = strndup(p, j);
       i++;
-      p++;
+      p += j;
       continue;
     }
     if (strncmp(p, "==", 2) == 0) {
@@ -126,6 +133,7 @@ int main(int argc, char **argv) {
     return 0;
   }
   user_input = argv[1];
+  ident_map = new_map();
   tokenize(user_input);
   program();
 

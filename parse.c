@@ -13,11 +13,12 @@ Node *term();
 void program_();
 Node *assign();
 Node *assign_();
-Node *new_node_ident(int val);
+Node *new_node_ident(char *name);
 Node *new_node_num(int val);
 Node *new_node(int op, Node *lhs, Node *rhs);
 
 int pos = 0;
+int ident_count = 0;
 
 int consume(int ty) {
   if (tokens[pos].ty != ty)
@@ -119,7 +120,7 @@ Node *term() {
   if (tokens[pos].ty == TK_NUM)
     return new_node_num(tokens[pos++].val);
   if (tokens[pos].ty == TK_IDENT)
-    return new_node_ident(tokens[pos++].input[0]);
+    return new_node_ident(tokens[pos++].name);
   if (consume('(')) {
     Node *node = expr();
     if (!consume(')'))
@@ -149,12 +150,16 @@ void node_debug(Node *node) {
   printf("lhs: %s\n", node->lhs == NULL ? "NULL" : "lhs node");
   printf("rhs: %s\n", node->rhs == NULL ? "NULL" : "rhs node");
   printf("val: %d\n", node->val);
-  printf("name: %c\n", node->name);
+  // printf("name: %c\n", node->name);
 }
 
-Node *new_node_ident(int val) {
+Node *new_node_ident(char *name) {
+  if (map_get(ident_map, name) == NULL) {
+    ident_count++;
+    map_put(ident_map, name, (void *)ident_count);
+  }
   Node *node = malloc(sizeof(Node));
   node->ty = ND_IDENT;
-  node->name = val;
+  node->name = name;
   return node;
 }

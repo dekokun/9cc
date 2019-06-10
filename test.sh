@@ -51,6 +51,10 @@ try_fail() {
   fi
 }
 
+try 0 '_foo = 0; return _foo;'
+try 6 'foo = 1; bar = 2 + 3; return foo + bar;'
+try 6 'foo = 1; far = 2 + 3; return foo + far;'
+## try 0 'return foo + bar;'
 try 2 'a = 2; b = 3; return a;'
 try 19 'a = 8; b = 5 * 6 - 8; return a + b / 2;'
 try 5 'return 5;return 6;'
