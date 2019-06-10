@@ -8,7 +8,7 @@ enum {
   TK_EQ,        // equal
   TK_NE,        // not equal
   TK_LE,        // less than or equal
-  TK_GE,        // greater than or equal TK_LT,        // less than
+  TK_GE,        // greater than or equal
   TK_LT,        // less than
   TK_GT,        // greater than
 };
