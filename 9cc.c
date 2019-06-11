@@ -45,6 +45,13 @@ void tokenize(char *p) {
       p += 4;
       continue;
     }
+    if (strncmp(p, "while", 5) == 0 && !is_alnum(p[5])) {
+      tokens[i].ty = TK_WHILE;
+      tokens[i].input = p;
+      i++;
+      p += 5;
+      continue;
+    }
     if (strncmp(p, "if", 2) == 0 && !is_alnum(p[2])) {
       tokens[i].ty = TK_IF;
       tokens[i].input = p;

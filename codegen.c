@@ -27,26 +27,39 @@ void gen(Node *node) {
     return;
   }
 
-  if (node->ty == ND_IF) {
-    gen(node->if_expr);
+  if (node->ty == ND_WHILE) {
+    printf("  .Lbegin%d:\n", label_num);
+    gen(node->cond);
     printf("  pop rax\n");
     printf("  cmp rax, 0\n");
     printf("  je  .Lend%d\n", label_num);
-    gen(node->if_stmt);
+    gen(node->then);
+    printf("  jmp  .Lbegin%d\n", label_num);
+    printf("  .Lend%d:\n", label_num);
+    label_num += 1;
+    return;
+  }
+
+  if (node->ty == ND_IF) {
+    gen(node->cond);
+    printf("  pop rax\n");
+    printf("  cmp rax, 0\n");
+    printf("  je  .Lend%d\n", label_num);
+    gen(node->then);
     printf("  .Lend%d:\n", label_num);
     label_num += 1;
     return;
   }
 
   if (node->ty == ND_IF_ELSE) {
-    gen(node->if_expr);
+    gen(node->cond);
     printf("  pop rax\n");
     printf("  cmp rax, 0\n");
     printf("  je  .Lelse%d\n", label_num);
-    gen(node->if_stmt);
+    gen(node->then);
     printf("  jmp .Lend%d\n", label_num);
     printf("  .Lelse%d:\n", label_num);
-    gen(node->else_stmt);
+    gen(node->els);
     printf("  .Lend%d:\n", label_num);
     label_num += 1;
     return;
