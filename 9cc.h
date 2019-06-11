@@ -11,6 +11,8 @@ enum {
   TK_GE,        // greater than or equal
   TK_LT,        // less than
   TK_GT,        // greater than
+  TK_IF,        // if
+  TK_ELSE,      // else
 };
 
 // トークンの型

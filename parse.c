@@ -40,6 +40,10 @@ Node *stmt() {
     node = malloc(sizeof(Node));
     node->ty = ND_RETURN;
     node->lhs = expr();
+  } else if (consume(TK_IF)) {
+    if (!consume('(')) {
+      error_at(tokens[pos].input, "'('ではないトークンです");
+    }
   } else {
     node = expr();
   }

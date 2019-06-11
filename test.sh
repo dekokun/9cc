@@ -80,6 +80,7 @@ try 0 '3 > 3;'
 try 1 '3 > 2;'
 
 try_fail '();'
+try_fail 'if  hoge;'
 try_fail '1 + (2 + );'
 try_fail '1 1;'
 try_fail '1 = 1;'
