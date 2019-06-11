@@ -44,6 +44,10 @@ Node *stmt() {
     if (!consume('(')) {
       error_at(tokens[pos].input, "'('ではないトークンです");
     }
+    Node *lhs = expr();
+    if (!consume(')')) {
+      error_at(tokens[pos].input, "')'ではないトークンです");
+    }
   } else {
     node = expr();
   }
