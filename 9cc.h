@@ -13,6 +13,7 @@ enum {
   TK_GT,        // greater than
   TK_IF,        // if
   TK_ELSE,      // else
+  TK_WHILE,     // while
 };
 
 // トークンの型
@@ -39,11 +40,11 @@ typedef struct Node { // 宣言の中でNodeを使ってるのでタグ名Node�
   int ty;
   struct Node *lhs;
   struct Node *rhs;
-  int val;                // tyがND_NUMの場合のみ使う
-  char *name;             // tyがND_IDENTの場合のみ使う
-  struct Node *if_expr;   // tyがND_IF/ND_IF_ELSEの場合のみ使う
-  struct Node *if_stmt;   // tyがND_IF/ND_IF_ELSEの場合のみ使う
-  struct Node *else_stmt; // tyがND_IF_ELSEの場合のみ使う
+  int val;           // tyがND_NUMの場合のみ使う
+  char *name;        // tyがND_IDENTの場合のみ使う
+  struct Node *cond; // tyがND_IF/ND_IF_ELSEの場合のみ使う
+  struct Node *then; // tyがND_IF/ND_IF_ELSEの場合のみ使う
+  struct Node *els;  // tyがND_IF_ELSEの場合のみ使う
 } Node;
 
 typedef struct {
