@@ -36,6 +36,19 @@ void program() {
 
 Node *stmt() {
   Node *node;
+  if (consume(TK_WHILE)) {
+    node = malloc(sizeof(Node));
+    node->ty = ND_WHILE;
+    if (!consume('(')) {
+      error_at(tokens[pos].input, "'('ではないトークンです");
+    }
+    node->cond = expr();
+    if (!consume(')')) {
+      error_at(tokens[pos].input, "')'ではないトークンです");
+    }
+    node->then = stmt();
+    return node;
+  }
   if (consume(TK_IF)) {
     if (!consume('(')) {
       error_at(tokens[pos].input, "'('ではないトークンです");

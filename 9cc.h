@@ -34,6 +34,7 @@ enum {
   ND_RETURN,  // return
   ND_IF,      // if
   ND_IF_ELSE, // if - else
+  ND_WHILE,   // while
 };
 
 typedef struct Node { // 宣言の中でNodeを使ってるのでタグ名Nodeが必要
