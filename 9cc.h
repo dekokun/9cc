@@ -8,9 +8,11 @@ enum {
   TK_EQ,        // equal
   TK_NE,        // not equal
   TK_LE,        // less than or equal
-  TK_GE,        // greater than or equal TK_LT,        // less than
+  TK_GE,        // greater than or equal
   TK_LT,        // less than
   TK_GT,        // greater than
+  TK_IF,        // if
+  TK_ELSE,      // else
 };
 
 // トークンの型
@@ -24,19 +26,24 @@ typedef struct {
 enum {
   ND_NUM = 256,
   ND_IDENT,
-  ND_EQ,     // equal
-  ND_NE,     // not equal
-  ND_LE,     // less than or equal
-  ND_LT,     // less than
-  ND_RETURN, // return
+  ND_EQ,      // equal
+  ND_NE,      // not equal
+  ND_LE,      // less than or equal
+  ND_LT,      // less than
+  ND_RETURN,  // return
+  ND_IF,      // if
+  ND_IF_ELSE, // if - else
 };
 
 typedef struct Node { // 宣言の中でNodeを使ってるのでタグ名Nodeが必要
   int ty;
   struct Node *lhs;
   struct Node *rhs;
-  int val;    // tyがND_NUMの場合のみ使う
-  char *name; // tyがND_IDENTの場合のみ使う
+  int val;                // tyがND_NUMの場合のみ使う
+  char *name;             // tyがND_IDENTの場合のみ使う
+  struct Node *if_expr;   // tyがND_IF/ND_IF_ELSEの場合のみ使う
+  struct Node *if_stmt;   // tyがND_IF/ND_IF_ELSEの場合のみ使う
+  struct Node *else_stmt; // tyがND_IF_ELSEの場合のみ使う
 } Node;
 
 typedef struct {

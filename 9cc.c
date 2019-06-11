@@ -38,6 +38,20 @@ void tokenize(char *p) {
       p += 6;
       continue;
     }
+    if (strncmp(p, "else", 4) == 0 && !is_alnum(p[4])) {
+      tokens[i].ty = TK_ELSE;
+      tokens[i].input = p;
+      i++;
+      p += 4;
+      continue;
+    }
+    if (strncmp(p, "if", 2) == 0 && !is_alnum(p[2])) {
+      tokens[i].ty = TK_IF;
+      tokens[i].input = p;
+      i++;
+      p += 2;
+      continue;
+    }
     if (('a' <= *p && *p <= 'z') || ('A' <= *p && *p <= 'Z') || *p == '_') {
       int j = 0;
       // 変数が何文字続くか判定
