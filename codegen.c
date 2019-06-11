@@ -1,6 +1,8 @@
 #include "9cc.h"
 #include <stdio.h>
 
+int label_num = 0;
+
 void gen_lval(Node *node) {
   if (node->ty != ND_IDENT) {
     error("代入の左辺値が変数ではありません");
@@ -22,6 +24,16 @@ void gen(Node *node) {
     printf("  mov rsp, rbp\n");
     printf("  pop rbp\n");
     printf("  ret\n");
+    return;
+  }
+
+  if (node->ty == ND_IF) {
+    gen(node->lhs);
+    printf("  pop rax\n");
+    printf("  cmp rax, 0\n");
+    printf("  je  .LendXXX\n");
+    gen(node->rhs);
+    printf("  .LendXXX:\n");
     return;
   }
 

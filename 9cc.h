@@ -31,6 +31,7 @@ enum {
   ND_LE,     // less than or equal
   ND_LT,     // less than
   ND_RETURN, // return
+  ND_IF,     // if
 };
 
 typedef struct Node { // 宣言の中でNodeを使ってるのでタグ名Nodeが必要

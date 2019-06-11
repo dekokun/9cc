@@ -48,6 +48,12 @@ Node *stmt() {
     if (!consume(')')) {
       error_at(tokens[pos].input, "')'ではないトークンです");
     }
+    Node *rhs = stmt();
+    node = malloc(sizeof(Node));
+    node->ty = ND_IF;
+    node->lhs = lhs;
+    node->rhs = rhs;
+    return node;
   } else {
     node = expr();
   }

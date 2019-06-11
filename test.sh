@@ -51,6 +51,8 @@ try_fail() {
   fi
 }
 
+try 3 'a = 2; if (1 == 1) a = 3; return a;'
+try 2 'a = 2; if (1 != 1) a = 3; return a;'
 try 0 '_foo = 0; return _foo;'
 try 6 'foo = 1; bar = 2 + 3; return foo + bar;'
 try 6 'foo = 1; far = 2 + 3; return foo + far;'
