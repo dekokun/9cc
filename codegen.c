@@ -31,9 +31,10 @@ void gen(Node *node) {
     gen(node->lhs);
     printf("  pop rax\n");
     printf("  cmp rax, 0\n");
-    printf("  je  .LendXXX\n");
+    printf("  je  .Lend%d\n", label_num);
     gen(node->rhs);
-    printf("  .LendXXX:\n");
+    printf("  .Lend%d:\n", label_num);
+    label_num += 1;
     return;
   }
 
