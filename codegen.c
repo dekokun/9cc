@@ -28,11 +28,11 @@ void gen(Node *node) {
   }
 
   if (node->ty == ND_IF) {
-    gen(node->lhs);
+    gen(node->if_expr);
     printf("  pop rax\n");
     printf("  cmp rax, 0\n");
     printf("  je  .Lend%d\n", label_num);
-    gen(node->rhs);
+    gen(node->if_stmt);
     printf("  .Lend%d:\n", label_num);
     label_num += 1;
     return;

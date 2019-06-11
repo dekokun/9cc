@@ -44,15 +44,15 @@ Node *stmt() {
     if (!consume('(')) {
       error_at(tokens[pos].input, "'('ではないトークンです");
     }
-    Node *lhs = expr();
+    Node *if_expr = expr();
     if (!consume(')')) {
       error_at(tokens[pos].input, "')'ではないトークンです");
     }
-    Node *rhs = stmt();
+    Node *if_stmt = stmt();
     node = malloc(sizeof(Node));
     node->ty = ND_IF;
-    node->lhs = lhs;
-    node->rhs = rhs;
+    node->if_expr = if_expr;
+    node->if_stmt = if_stmt;
     return node;
   } else {
     node = expr();
