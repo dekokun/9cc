@@ -46,9 +46,14 @@ Node *stmt() {
     }
     Node *if_stmt = stmt();
     node = malloc(sizeof(Node));
-    node->ty = ND_IF;
     node->if_expr = if_expr;
     node->if_stmt = if_stmt;
+    if (consume(TK_ELSE)) {
+      node->ty = ND_IF_ELSE;
+      node->else_stmt = stmt();
+    } else {
+      node->ty = ND_IF;
+    }
     return node;
   }
   if (consume(TK_RETURN)) {
