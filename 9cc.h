@@ -43,8 +43,8 @@ typedef struct Node { // 宣言の中でNodeを使ってるのでタグ名Node�
   struct Node *rhs;
   int val;           // tyがND_NUMの場合のみ使う
   char *name;        // tyがND_IDENTの場合のみ使う
-  struct Node *cond; // tyがND_IF/ND_IF_ELSEの場合のみ使う
-  struct Node *then; // tyがND_IF/ND_IF_ELSEの場合のみ使う
+  struct Node *cond; // tyがND_IF/ND_IF_ELSE/ND_WHILEの場合のみ使う
+  struct Node *then; // tyがND_IF/ND_IF_ELSE/ND_WHILEの場合のみ使う
   struct Node *els;  // tyがND_IF_ELSEの場合のみ使う
 } Node;
 
