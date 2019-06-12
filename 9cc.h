@@ -14,6 +14,7 @@ enum {
   TK_IF,        // if
   TK_ELSE,      // else
   TK_WHILE,     // while
+  TK_FOR,       // for
 };
 
 // トークンの型
@@ -35,6 +36,7 @@ enum {
   ND_IF,      // if
   ND_IF_ELSE, // if - else
   ND_WHILE,   // while
+  ND_FOR,     // for
 };
 
 typedef struct Node { // 宣言の中でNodeを使ってるのでタグ名Nodeが必要
@@ -43,9 +45,11 @@ typedef struct Node { // 宣言の中でNodeを使ってるのでタグ名Node�
   struct Node *rhs;
   int val;           // tyがND_NUMの場合のみ使う
   char *name;        // tyがND_IDENTの場合のみ使う
-  struct Node *cond; // tyがND_IF/ND_IF_ELSE/ND_WHILEの場合のみ使う
-  struct Node *then; // tyがND_IF/ND_IF_ELSE/ND_WHILEの場合のみ使う
-  struct Node *els;  // tyがND_IF_ELSEの場合のみ使う
+  struct Node *cond; // tyがND_IF/ND_IF_ELSE/ND_WHILE/ND_IFの場合のみ使う
+  struct Node *then; // tyがND_IF/ND_IF_ELSE/ND_WHILE/ND_FORの場合のみ使う
+  struct Node *els;       // tyがND_IF_ELSEの場合のみ使う
+  struct Node *init;      // tyがND_FORの場合のみ使う
+  struct Node *iter_expr; // tyがND_FORの場合のみ使う
 } Node;
 
 typedef struct {
