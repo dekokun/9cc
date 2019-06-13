@@ -42,14 +42,25 @@ Node *stmt() {
     if (!consume('(')) {
       error_at(tokens[pos].input, "'('ではないトークンです");
     }
-    node->init = expr();
-    if (consume(';')) {
+    char first_colon = ';';
+    char second_colon = ';';
+    if (tokens[pos].ty != first_colon) {
+      node->init = expr();
+    } else {
+      node->init = NULL;
+    }
+    if (!consume(first_colon)) {
+      error_at(tokens[pos].input, "';'ではないトークンです");
+    }
+    if (tokens[pos].ty != second_colon) {
       node->cond = expr();
     } else {
       node->cond = NULL;
-      node->iter_expr = NULL;
     }
-    if (consume(';')) {
+    if (!consume(second_colon)) {
+      error_at(tokens[pos].input, "';'ではないトークンです");
+    }
+    if (tokens[pos].ty != ')') {
       node->iter_expr = expr();
     } else {
       node->iter_expr = NULL;

@@ -52,6 +52,9 @@ try_fail() {
 }
 
 try 5 'for (i = 0; i < 5; i = i + 1) i;return i;'
+try 5 'i = 0; for (;i < 5;) i = i + 1;return i;'
+try 6 'for (i = 0; ;i = i + 1) if (i > 5) return i;'
+try 6 'for (i = 0; ;) if ((i = i + 1) > 5) return i;'
 try 4 'a = 0; while (a <= 3) a = a + 1;return a;'
 try 3 'a = 2; if (1 == 1) a = 3; else a = 4; return a;'
 try 4 'a = 2; if (1 != 1) a = 3; else a = 4; return a;'
