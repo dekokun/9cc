@@ -36,6 +36,41 @@ void program() {
 
 Node *stmt() {
   Node *node;
+  if (consume(TK_FOR)) {
+    node = malloc(sizeof(Node));
+    node->ty = ND_FOR;
+    if (!consume('(')) {
+      error_at(tokens[pos].input, "'('ではないトークンです");
+    }
+    char first_colon = ';';
+    char second_colon = ';';
+    if (tokens[pos].ty != first_colon) {
+      node->init = expr();
+    } else {
+      node->init = NULL;
+    }
+    if (!consume(first_colon)) {
+      error_at(tokens[pos].input, "';'ではないトークンです");
+    }
+    if (tokens[pos].ty != second_colon) {
+      node->cond = expr();
+    } else {
+      node->cond = NULL;
+    }
+    if (!consume(second_colon)) {
+      error_at(tokens[pos].input, "';'ではないトークンです");
+    }
+    if (tokens[pos].ty != ')') {
+      node->iter_expr = expr();
+    } else {
+      node->iter_expr = NULL;
+    }
+    if (!consume(')')) {
+      error_at(tokens[pos].input, "')'ではないトークンです");
+    }
+    node->then = stmt();
+    return node;
+  }
   if (consume(TK_WHILE)) {
     node = malloc(sizeof(Node));
     node->ty = ND_WHILE;
