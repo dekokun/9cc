@@ -14,6 +14,15 @@ void gen_lval(Node *node) {
 }
 
 void gen(Node *node) {
+  if (node->ty == ND_BLOCK) {
+    Vector *statements = node->statements;
+    for (int i = 0; i < statements->len; i++) {
+      Node *node = (Node *)statements->data[i];
+      gen(node);
+      printf("  pop rax\n");
+    }
+    return;
+  }
   if (node->ty == ND_NUM) {
     printf("  push %d\n", node->val);
     return;

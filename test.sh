@@ -51,6 +51,9 @@ try_fail() {
   fi
 }
 
+try 5 '{return 5;}'
+try 5 '{a= 5;return a;}'
+try 3 'a = 1; if (a > 5) {return 1;} else {a = a + 1; return a + 1;}'
 try 5 'for (i = 0; i < 5; i = i + 1) i;return i;'
 try 5 'i = 0; for (;i < 5;) i = i + 1;return i;'
 try 6 'for (i = 0; ;i = i + 1) if (i > 5) return i;'

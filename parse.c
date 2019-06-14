@@ -36,6 +36,16 @@ void program() {
 
 Node *stmt() {
   Node *node;
+  if (consume('{')) {
+    Vector *vec = new_vector();
+    while (!consume('}')) {
+      vec_push(vec, (void *)stmt());
+    }
+    node = malloc(sizeof(Node));
+    node->ty = ND_BLOCK;
+    node->statements = vec;
+    return node;
+  }
   if (consume(TK_FOR)) {
     node = malloc(sizeof(Node));
     node->ty = ND_FOR;

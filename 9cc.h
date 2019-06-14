@@ -37,6 +37,7 @@ enum {
   ND_IF_ELSE, // if - else
   ND_WHILE,   // while
   ND_FOR,     // for
+  ND_BLOCK,   // compound statement(block)
 };
 
 typedef struct Node { // 宣言の中でNodeを使ってるのでタグ名Nodeが必要
@@ -47,9 +48,10 @@ typedef struct Node { // 宣言の中でNodeを使ってるのでタグ名Node�
   char *name;        // tyがND_IDENTの場合のみ使う
   struct Node *cond; // tyがND_IF/ND_IF_ELSE/ND_WHILE/ND_IFの場合のみ使う
   struct Node *then; // tyがND_IF/ND_IF_ELSE/ND_WHILE/ND_FORの場合のみ使う
-  struct Node *els;       // tyがND_IF_ELSEの場合のみ使う
-  struct Node *init;      // tyがND_FORの場合のみ使う
-  struct Node *iter_expr; // tyがND_FORの場合のみ使う
+  struct Node *els;          // tyがND_IF_ELSEの場合のみ使う
+  struct Node *init;         // tyがND_FORの場合のみ使う
+  struct Node *iter_expr;    // tyがND_FORの場合のみ使う
+  struct Vector *statements; // tyがND_BLOCKの場合
 } Node;
 
 typedef struct {
