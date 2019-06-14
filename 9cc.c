@@ -19,6 +19,13 @@ void error_at(char *loc, char *msg) {
   exit(1);
 }
 
+void log_at(char *loc, char *msg) {
+  int pos = loc - user_input;
+  fprintf(stderr, "%s\n", user_input);
+  fprintf(stderr, "%*s", pos, ""); // pos個の空白を出力
+  fprintf(stderr, "^ %s\n", msg);
+}
+
 int is_alnum(char c) {
   return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') ||
          ('0' <= c && c <= '9') || (c == '_');
@@ -105,6 +112,20 @@ void tokenize(char *p) {
       tokens[i].input = p;
       i++;
       p += 2;
+      continue;
+    }
+    if (*p == '{') {
+      tokens[i].ty = *p;
+      tokens[i].input = p;
+      i++;
+      p++;
+      continue;
+    }
+    if (*p == '}') {
+      tokens[i].ty = *p;
+      tokens[i].input = p;
+      i++;
+      p++;
       continue;
     }
     if (*p == '<') {
