@@ -171,6 +171,13 @@ __attribute__((noreturn)) void error(char *fmt, ...) {
   exit(1);
 }
 
+void logging(char *fmt, ...) {
+  va_list ap;
+  va_start(ap, fmt);
+  vfprintf(stderr, fmt, ap);
+  fprintf(stderr, "\n");
+}
+
 int main(int argc, char **argv) {
   if (argc != 2) {
     fprintf(stderr, "引数の個数が正しくありません\n");
