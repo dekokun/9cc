@@ -17,7 +17,7 @@ try() {
   input="$2"
 
   ./9cc "$input" >tmp.s
-  gcc -static -o tmp tmp.s
+  gcc -static -o tmp tmp.s test/func_call_test.o
   ./tmp
   actual="$?"
 

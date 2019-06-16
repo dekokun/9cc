@@ -1,13 +1,15 @@
 CFLAGS=-Wall -std=c11
 SRCS=$(wildcard *.c)
 OBJS=$(SRCS:.c=.o)
+TEST_SRCS=$(wildcard test/*.c)
+TEST_OBJS=$(TEST_SRCS:.c=.o)
 
 9cc: $(OBJS)
 
 $(OBJS): 9cc.h
 
 .PHONY: test
-test: 9cc
+test: 9cc $(TEST_OBJS)
 	./9cc -test
 	./test.sh
 
