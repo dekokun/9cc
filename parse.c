@@ -233,8 +233,8 @@ void node_debug(Node *node) {
 
 Node *new_node_ident(char *name) {
   if (map_get(ident_map, name) == NULL) {
-    ident_count++;
     map_put(ident_map, name, (void *)ident_count);
+    ident_count++;
   }
   Node *node = malloc(sizeof(Node));
   node->ty = ND_IDENT;

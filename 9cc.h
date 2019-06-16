@@ -68,6 +68,7 @@ typedef struct {
 extern Token tokens[];
 extern Node *code[];
 extern Map *ident_map;
+extern int ident_count;
 
 void gen();
 void program();
