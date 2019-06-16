@@ -6,13 +6,16 @@ OBJS=$(SRCS:.c=.o)
 
 $(OBJS): 9cc.h
 
+.PHONY: test
 test: 9cc
 	./9cc -test
 	./test.sh
 
+.PHONY: test-verbose
 test-verbose: 9cc
 	./9cc -test
 	./test.sh -v
 
+.PHONY: clean
 clean:
 	rm -f 9cc *.o *~ tmp*
