@@ -197,8 +197,22 @@ Node *unary() {
 Node *term() {
   if (tokens[pos].ty == TK_NUM)
     return new_node_num(tokens[pos++].val);
-  if (tokens[pos].ty == TK_IDENT)
-    return new_node_ident(tokens[pos++].name);
+  if (tokens[pos].ty == TK_IDENT) {
+    char *name = tokens[pos++].name;
+    if (!consume('(')) {
+      // 変数
+      return new_node_ident(name);
+    }
+    // 関数呼び出し
+    if (!consume(')')) {
+      error_at(tokens[pos].input,
+               "関数呼び出しにおいて開き括弧と閉じ括弧の対応がついてないです");
+    }
+    Node *node = malloc(sizeof(Node));
+    node->ty = ND_FUNC_CALL;
+    node->name = name;
+    return node;
+  }
   if (consume('(')) {
     Node *node = expr();
     if (!consume(')'))

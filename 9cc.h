@@ -28,16 +28,17 @@ typedef struct {
 enum {
   ND_NUM = 256,
   ND_IDENT,
-  ND_EQ,      // equal
-  ND_NE,      // not equal
-  ND_LE,      // less than or equal
-  ND_LT,      // less than
-  ND_RETURN,  // return
-  ND_IF,      // if
-  ND_IF_ELSE, // if - else
-  ND_WHILE,   // while
-  ND_FOR,     // for
-  ND_BLOCK,   // compound statement(block)
+  ND_EQ,        // equal
+  ND_NE,        // not equal
+  ND_LE,        // less than or equal
+  ND_LT,        // less than
+  ND_RETURN,    // return
+  ND_IF,        // if
+  ND_IF_ELSE,   // if - else
+  ND_WHILE,     // while
+  ND_FOR,       // for
+  ND_BLOCK,     // compound statement(block)
+  ND_FUNC_CALL, // function call
 };
 
 typedef struct Node { // 宣言の中でNodeを使ってるのでタグ名Nodeが必要
