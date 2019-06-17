@@ -12,7 +12,6 @@ Node *mul();
 Node *term();
 void program_();
 Node *assign();
-Node *assign_();
 Node *new_node_ident(char *name);
 Node *new_node_num(int val);
 Node *new_node(int op, Node *lhs, Node *rhs);
