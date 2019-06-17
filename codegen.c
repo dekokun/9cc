@@ -101,6 +101,11 @@ void gen(Node *node) {
     return;
   }
 
+  if (node->ty == ND_FUNC_CALL) {
+    printf("  call %s\n", node->name);
+    printf("  push rax\n");
+    return;
+  }
   if (node->ty == ND_IDENT) {
     gen_lval(node);
     printf("  pop rax\n");
