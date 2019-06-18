@@ -203,13 +203,20 @@ Node *term() {
       return new_node_ident(name);
     }
     // 関数呼び出し
-    if (!consume(')')) {
-      error_at(tokens[pos].input,
-               "関数呼び出しにおいて開き括弧と閉じ括弧の対応がついてないです");
+    Vector *args = new_vector();
+    while (!consume(')')) {
+      vec_push(args, (void *)expr());
+      if (!consume(',')) {
+        if (consume(')')) {
+          break;
+        }
+        error_at(tokens[pos].input, "開き括弧と閉じ括弧の対応がついてないです");
+      }
     }
     Node *node = malloc(sizeof(Node));
     node->ty = ND_FUNC_CALL;
     node->name = name;
+    node->arguments = args;
     return node;
   }
   if (consume('(')) {
