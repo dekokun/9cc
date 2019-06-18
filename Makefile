@@ -14,6 +14,9 @@ test:
 test-verbose:
 	docker run --rm -v $(shell pwd):/tmp/ 9cc bash -c "cd /tmp/; make -f docker.mk test-verbose"
 
+.PHONY: attach
+attach:
+	docker run -t -i --rm -v $(shell pwd):/tmp/ 9cc bash
 
 .PHONY: clean
 clean:
