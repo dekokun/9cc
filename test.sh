@@ -51,6 +51,7 @@ try_fail() {
   fi
 }
 
+try 6 'foo(a, b){return a * b;} return foo(3, 2);'
 try 7 'a = foo_1(2); b = foo_2(2, 3); return a + b;'
 try 2 'return foo_1(2);'
 try 5 'return foo_2(2, 3);'
