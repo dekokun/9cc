@@ -17,7 +17,7 @@ try() {
   input="$2"
 
   ./9cc "$input" >tmp.s
-  gcc -static -o tmp tmp.s test/func_call_test.o
+  gcc -static -o tmp tmp.s test/*.o
   ./tmp
   actual="$?"
 
@@ -51,6 +51,13 @@ try_fail() {
   fi
 }
 
+try 7 'a = foo_1(2); b = foo_2(2, 3); return a + b;'
+try 2 'return foo_1(2);'
+try 5 'return foo_2(2, 3);'
+try 8 'return foo_3(2, 3, 3);'
+try 12 'return foo_4(2, 3, 3, 4);'
+try 17 'return foo_5(2, 3, 3, 4, 5);'
+try 18 'return foo_6(2, 3, 3, 4, 5, 1);'
 try 1 'return foo();'
 try 28 'a1 = 1;a2 = 1;a3 = 1;a4 = 1;a5 = 1;a6 = 1;a7 = 1;a8 = 1;a9 = 1;a10 = 1;a11 = 1;a12 = 1;a13 = 1;a14 = 1;a15 = 1;a16 = 1;a17 = 1;a18 = 1;a19 = 1;a20 = 1;a21 = 1;a22 = 1;a23 = 1;a24 = 1;a25 = 1;a26 = 1;a27 = 1;a28 = 1;return a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9 + a10 + a11 + a12 + a13 + a14 + a15 + a16 + a17 + a18 + a19 + a20 + a21 + a22 + a23 + a24 + a25 + a26 + a27 + a28;'
 try 5 '{return 5;}'
@@ -102,5 +109,6 @@ try_fail '1 + (2 + );'
 try_fail '1 1;'
 try_fail '1 = 1;'
 try_fail '(a + 1) = 1;'
+try_fail 'return foo_2(2, );'
 
 echo OK

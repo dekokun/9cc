@@ -53,6 +53,7 @@ typedef struct Node { // 宣言の中でNodeを使ってるのでタグ名Node�
   struct Node *init;         // tyがND_FORの場合のみ使う
   struct Node *iter_expr;    // tyがND_FORの場合のみ使う
   struct Vector *statements; // tyがND_BLOCKの場合
+  struct Vector *arguments;  // tyがND_FUNC_CALLの場合
 } Node;
 
 typedef struct {

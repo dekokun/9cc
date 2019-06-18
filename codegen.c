@@ -102,6 +102,14 @@ void gen(Node *node) {
   }
 
   if (node->ty == ND_FUNC_CALL) {
+    Vector *arguments = node->arguments;
+    // 第1引数～第6引数まで RDI, RSI, RDX, RCX, R8, R9 を順に使用
+    char *registers[6] = {"RDI", "RSI", "RDX", "RCX", "R8", "R9"};
+    for (int i = 0; i < arguments->len; i++) {
+      Node *node = (Node *)arguments->data[i];
+      gen(node);
+      printf("  pop %s\n", registers[i]);
+    }
     printf("  call %s\n", node->name);
     printf("  push rax\n");
     return;
