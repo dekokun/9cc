@@ -10,6 +10,8 @@ Node *relational();
 Node *unary();
 Node *mul();
 Node *term();
+Vector *non_empty_argument_seq();
+Vector *argument_seq();
 void program_();
 Node *assign();
 Node *new_node_ident(char *name);
@@ -203,15 +205,9 @@ Node *term() {
       return new_node_ident(name);
     }
     // 関数呼び出し
-    Vector *args = new_vector();
-    while (!consume(')')) {
-      vec_push(args, (void *)expr());
-      if (!consume(',')) {
-        if (consume(')')) {
-          break;
-        }
-        error_at(tokens[pos].input, "開き括弧と閉じ括弧の対応がついてないです");
-      }
+    Vector *args = argument_seq();
+    if (!consume(')')) {
+      error_at(tokens[pos].input, "開き括弧と閉じ括弧の対応がついてないです");
     }
     Node *node = malloc(sizeof(Node));
     node->ty = ND_FUNC_CALL;
@@ -226,6 +222,24 @@ Node *term() {
     return node;
   }
   error_at(tokens[pos].input, "数値でも開きカッコでもないトークンです");
+}
+
+Vector *argument_seq() {
+  if (tokens[pos].ty == ')') {
+    return new_vector();
+  }
+  return non_empty_argument_seq();
+}
+Vector *non_empty_argument_seq() {
+  Vector *args = new_vector();
+  vec_push(args, (void *)term());
+  if (consume(',')) {
+    Vector *after_args = non_empty_argument_seq();
+    for (int i = 0; i < after_args->len; i++) {
+      vec_push(args, after_args->data[i]);
+    }
+  }
+  return args;
 }
 
 Node *new_node(int op, Node *lhs, Node *rhs) {
