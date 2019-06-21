@@ -4,3 +4,26 @@
 
 C言語のコンパイラです。
 [低レイヤを知りたい人のための Cコンパイラ作成入門](https://www.sigbus.info/compilerbook/) を参考に作成しています
+
+## EBNF
+
+```ebnf
+program    = stmt*
+stmt       = expr ";"
+           | "return" expr ";"
+           | "if" "(" expr ")" stmt ("else" stmt)?
+           | "while" "(" expr ")" stmt
+           | "for" "(" expr? ";" expr? ";" expr? ")" stmt
+           | "{" stmt* "}"
+expr       = assign
+assign     = equality ("=" assign)?
+equality   = relational ("==" relational | "!=" relational)*
+relational = add ("<" add | "<=" add | ">" add | ">=" add)*
+add        = mul ("+" mul | "-" mul)*
+mul        = unary ("*" unary | "/" unary)*
+unary      = ("+" | "-")? term
+term       = num
+           | ident
+           | ident("(" ")")?
+           | "(" expr ")"
+```
