@@ -24,6 +24,8 @@ mul        = unary ("*" unary | "/" unary)*
 unary      = ("+" | "-")? term
 term       = num
            | ident
-           | ident("(" ")")?
+           | ident("(" arguments ")")?
            | "(" expr ")"
+arguments  = ε | non_empty_arguments
+non_empty_arguments = term | non_empty_arguments
 ```
