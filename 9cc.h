@@ -41,21 +41,6 @@ enum {
   ND_FUNC_CALL, // function call
 };
 
-typedef struct Node { // 宣言の中でNodeを使ってるのでタグ名Nodeが必要
-  int ty;
-  struct Node *lhs;
-  struct Node *rhs;
-  int val;           // tyがND_NUMの場合のみ使う
-  char *name;        // tyがND_IDENTの場合のみ使う
-  struct Node *cond; // tyがND_IF/ND_IF_ELSE/ND_WHILE/ND_IFの場合のみ使う
-  struct Node *then; // tyがND_IF/ND_IF_ELSE/ND_WHILE/ND_FORの場合のみ使う
-  struct Node *els;          // tyがND_IF_ELSEの場合のみ使う
-  struct Node *init;         // tyがND_FORの場合のみ使う
-  struct Node *iter_expr;    // tyがND_FORの場合のみ使う
-  struct Vector *statements; // tyがND_BLOCKの場合
-  struct Vector *arguments;  // tyがND_FUNC_CALLの場合
-} Node;
-
 typedef struct {
   void **data;
   int capacity;
@@ -66,6 +51,21 @@ typedef struct {
   Vector *keys;
   Vector *vals;
 } Map;
+
+typedef struct Node { // 宣言の中でNodeを使ってるのでタグ名Nodeが必要
+  int ty;
+  struct Node *lhs;
+  struct Node *rhs;
+  int val;           // tyがND_NUMの場合のみ使う
+  char *name;        // tyがND_IDENTの場合のみ使う
+  struct Node *cond; // tyがND_IF/ND_IF_ELSE/ND_WHILE/ND_IFの場合のみ使う
+  struct Node *then; // tyがND_IF/ND_IF_ELSE/ND_WHILE/ND_FORの場合のみ使う
+  struct Node *els;       // tyがND_IF_ELSEの場合のみ使う
+  struct Node *init;      // tyがND_FORの場合のみ使う
+  struct Node *iter_expr; // tyがND_FORの場合のみ使う
+  Vector *statements;     // tyがND_BLOCKの場合
+  Vector *arguments;      // tyがND_FUNC_CALLの場合
+} Node;
 
 extern Token tokens[];
 extern Node *code[];
