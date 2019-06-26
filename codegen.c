@@ -13,6 +13,25 @@ void gen_lval(Node *node) {
   return;
 }
 
+void gen_func(Function *function) {
+  printf("%s:\n", function->name);
+  // プロローグ
+  // 変数26個分の領域を確保する
+  printf("  push rbp\n");
+  printf("  mov rbp, rsp\n");
+  printf("  sub rsp, %d\n", ident_count * 8);
+  for (int i = 0; i < function->statements->len; i++) {
+    gen((Node *)function->statements->data[i]);
+    // 式の評価結果としてスタックに一つの値が残っている
+    // はずなので、スタックが溢れないようにポップしておく
+    printf("  pop rax\n");
+  }
+  // エピローグ
+  // 最後の式の結果がRAXに残っているのでそれが返り値になる
+  printf("  mov rsp, rbp\n");
+  printf("  pop rbp\n");
+  printf("  ret\n");
+}
 void gen(Node *node) {
   if (node->ty == ND_BLOCK) {
     Vector *statements = node->statements;

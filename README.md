@@ -8,7 +8,8 @@ C言語のコンパイラです。
 ## EBNF
 
 ```ebnf
-program    = stmt*
+program    = function*
+function   = ident "(" ")" "{" stmt "}"
 stmt       = expr ";"
            | "return" expr ";"
            | "if" "(" expr ")" stmt ("else" stmt)?

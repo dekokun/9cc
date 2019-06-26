@@ -4,15 +4,19 @@ install:
 
 .PHONY: build
 build:
-	docker run -v $(shell pwd):/tmp/ 9cc bash -c "cd /tmp/; make -f docker.mk 9cc"
+	docker run --rm -v $(shell pwd):/tmp/ 9cc bash -c "cd /tmp/; make -f docker.mk 9cc"
 
 .PHONY: test
 test:
-	docker run -v $(shell pwd):/tmp/ 9cc bash -c "cd /tmp/; make -f docker.mk test"
+	docker run --rm -v $(shell pwd):/tmp/ 9cc bash -c "cd /tmp/; make -f docker.mk test"
 
 .PHONY: test-verbose
 test-verbose:
-	docker run -v $(shell pwd):/tmp/ 9cc bash -c "cd /tmp/; make -f docker.mk test-verbose"
+	docker run --rm -v $(shell pwd):/tmp/ 9cc bash -c "cd /tmp/; make -f docker.mk test-verbose"
+
+.PHONY: attach
+attach:
+	docker run -t -i --rm -v $(shell pwd):/tmp/ 9cc bash
 
 .PHONY: clean
 clean:

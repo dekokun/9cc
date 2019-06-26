@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+Function *function();
 Node *stmt();
 Node *expr();
 Node *equality();
@@ -31,8 +32,37 @@ int consume(int ty) {
 void program() {
   int i = 0;
   while (tokens[pos].ty != TK_EOF)
-    code[i++] = stmt();
+    code[i++] = function();
   code[i] = NULL;
+}
+
+Function *function() {
+  Function *function;
+  function = malloc(sizeof(Function));
+  // ident関数を使うように共通化
+  if (tokens[pos].ty != TK_IDENT) {
+    error_at(tokens[pos].input, "関数であるべき場所が関数でありません");
+  }
+  function->name = tokens[pos].name;
+  pos++;
+
+  if (!consume('(')) {
+    error_at(tokens[pos].input, "関数に(がありません");
+  }
+  // ident関数を使ってparamを識別
+  // まずは引数なし関数定義のみ
+  if (!consume(')')) {
+    error_at(tokens[pos].input, "関数に)がありません");
+  }
+  if (!consume('{')) {
+    error_at(tokens[pos].input, "関数本体が{で始まっていません");
+  }
+  Vector *stmts = new_vector();
+  while (!consume('}')) {
+    vec_push(stmts, (void *)stmt());
+  }
+  function->statements = stmts;
+  return function;
 }
 
 Node *stmt() {
