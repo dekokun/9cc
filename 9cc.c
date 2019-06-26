@@ -7,7 +7,7 @@
 
 // トークナイズした結果のトークン列はこの配列に保存する
 Token tokens[1000];
-Node *code[100];
+Function *code[100];
 char *user_input;
 Map *ident_map;
 
@@ -195,23 +195,9 @@ int main(int argc, char **argv) {
 
   printf(".intel_syntax noprefix\n");
   printf(".global main\n");
-  printf("main:\n");
-  // プロローグ
-  // 変数26個分の領域を確保する
-  printf("  push rbp\n");
-  printf("  mov rbp, rsp\n");
-  printf("  sub rsp, %d\n", ident_count * 8);
   for (int i = 0; code[i]; i++) {
-    gen(code[i]);
-    // 式の評価結果としてスタックに一つの値が残っている
-    // はずなので、スタックが溢れないようにポップしておく
-    printf("  pop rax\n");
+    gen_func(code[i]);
   }
 
-  // エピローグ
-  // 最後の式の結果がRAXに残っているのでそれが返り値になる
-  printf("  mov rsp, rbp\n");
-  printf("  pop rbp\n");
-  printf("  ret\n");
   return 0;
 }

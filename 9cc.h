@@ -67,8 +67,15 @@ typedef struct Node { // 宣言の中でNodeを使ってるのでタグ名Node�
   Vector *arguments;      // tyがND_FUNC_CALLの場合
 } Node;
 
+typedef struct {
+  char *name;
+  Map *var_map;
+  Vector *statements;
+} Function;
+
 extern Token tokens[];
-extern Node *code[];
+// 名前をfunctionsに
+extern Function *code[];
 extern Map *ident_map;
 extern int ident_count;
 
