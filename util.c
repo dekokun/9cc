@@ -38,3 +38,5 @@ void *map_get(Map *map, char *key) {
       return map->vals->data[i];
   return NULL;
 }
+
+int map_len(Map *map) { return map->keys->len; }

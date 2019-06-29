@@ -77,7 +77,6 @@ extern Token tokens[];
 // 名前をfunctionsに
 extern Function *code[];
 extern Map *ident_map;
-extern int ident_count;
 
 void gen();
 void program();
@@ -91,3 +90,4 @@ void vec_push(Vector *vec, void *elem);
 Map *new_map();
 void map_put(Map *map, char *key, void *val);
 void *map_get(Map *map, char *key);
+int map_len(Map *map);

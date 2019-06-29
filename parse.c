@@ -20,7 +20,6 @@ Node *new_node_num(int val);
 Node *new_node(int op, Node *lhs, Node *rhs);
 
 int pos = 0;
-int ident_count = 0;
 
 int consume(int ty) {
   if (tokens[pos].ty != ty)
@@ -297,8 +296,7 @@ void node_debug(Node *node) {
 
 Node *new_node_ident(char *name) {
   if (map_get(ident_map, name) == NULL) {
-    map_put(ident_map, name, (void *)ident_count);
-    ident_count++;
+    map_put(ident_map, name, (void *)(map_len(ident_map)));
   }
   Node *node = malloc(sizeof(Node));
   node->ty = ND_IDENT;

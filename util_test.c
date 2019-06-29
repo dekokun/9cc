@@ -25,15 +25,19 @@ void test_vector() {
 void test_map() {
   Map *map = new_map();
   expect(__LINE__, 0, (int)map_get(map, "foo"));
+  expect(__LINE__, 0, map_len(map));
 
   map_put(map, "foo", (void *)2);
   expect(__LINE__, 2, (int)map_get(map, "foo"));
+  expect(__LINE__, 1, map_len(map));
 
   map_put(map, "bar", (void *)4);
   expect(__LINE__, 4, (int)map_get(map, "bar"));
+  expect(__LINE__, 2, map_len(map));
 
   map_put(map, "foo", (void *)6);
   expect(__LINE__, 6, (int)map_get(map, "foo"));
+  expect(__LINE__, 3, map_len(map));
 }
 
 void runtest() {
