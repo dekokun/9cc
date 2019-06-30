@@ -92,41 +92,29 @@ Node *stmt() {
     } else {
       node->cond = NULL;
     }
-    if (!consume(second_colon)) {
-      error_at(tokens[pos].input, "';'ではないトークンです");
-    }
+    expect(second_colon);
     if (tokens[pos].ty != ')') {
       node->iter_expr = expr();
     } else {
       node->iter_expr = NULL;
     }
-    if (!consume(')')) {
-      error_at(tokens[pos].input, "')'ではないトークンです");
-    }
+    expect(')');
     node->then = stmt();
     return node;
   }
   if (consume(TK_WHILE)) {
     node = malloc(sizeof(Node));
     node->ty = ND_WHILE;
-    if (!consume('(')) {
-      error_at(tokens[pos].input, "'('ではないトークンです");
-    }
+    expect('(');
     node->cond = expr();
-    if (!consume(')')) {
-      error_at(tokens[pos].input, "')'ではないトークンです");
-    }
+    expect(')');
     node->then = stmt();
     return node;
   }
   if (consume(TK_IF)) {
-    if (!consume('(')) {
-      error_at(tokens[pos].input, "'('ではないトークンです");
-    }
+    expect('(');
     Node *if_expr = expr();
-    if (!consume(')')) {
-      error_at(tokens[pos].input, "')'ではないトークンです");
-    }
+    expect(')');
     Node *if_stmt = stmt();
     node = malloc(sizeof(Node));
     node->cond = if_expr;
@@ -146,9 +134,7 @@ Node *stmt() {
   } else {
     node = expr();
   }
-  if (!consume(';')) {
-    error_at(tokens[pos].input, "';'ではないトークンです");
-  }
+  expect(';');
   return node;
 }
 Node *expr() { return assign(); }
@@ -230,9 +216,7 @@ Node *term() {
     }
     // 関数呼び出し
     Vector *args = arguments();
-    if (!consume(')')) {
-      error_at(tokens[pos].input, "開き括弧と閉じ括弧の対応がついてないです");
-    }
+    expect(')');
     Node *node = malloc(sizeof(Node));
     node->ty = ND_FUNC_CALL;
     node->name = name;
@@ -241,8 +225,7 @@ Node *term() {
   }
   if (consume('(')) {
     Node *node = expr();
-    if (!consume(')'))
-      error_at(tokens[pos].input, "開き括弧と閉じ括弧の対応がついてないです");
+    expect(')');
     return node;
   }
   error_at(tokens[pos].input, "数値でも開きカッコでもないトークンです");
