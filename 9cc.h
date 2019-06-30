@@ -81,7 +81,7 @@ extern Map *ident_map;
 void gen();
 void program();
 __attribute__((noreturn)) void error(char *fmt, ...);
-__attribute__((noreturn)) void error_at(char *loc, char *msg);
+__attribute__((noreturn)) void error_at(char *loc, char *fmt, ...);
 void logging(char *fmt, ...);
 
 void runtest();

@@ -28,6 +28,12 @@ int consume(int ty) {
   return 1;
 }
 
+void expect(char ty) {
+  if (tokens[pos].ty != ty)
+    error_at(tokens[pos].input, "'%c'ではありません", ty);
+  pos++;
+}
+
 void program() {
   int i = 0;
   while (tokens[pos].ty != TK_EOF)
@@ -45,17 +51,10 @@ Function *function() {
   function->name = tokens[pos].name;
   pos++;
 
-  if (!consume('(')) {
-    error_at(tokens[pos].input, "関数に(がありません");
-  }
-  // ident関数を使ってparamを識別
+  expect('(');
   // まずは引数なし関数定義のみ
-  if (!consume(')')) {
-    error_at(tokens[pos].input, "関数に)がありません");
-  }
-  if (!consume('{')) {
-    error_at(tokens[pos].input, "関数本体が{で始まっていません");
-  }
+  expect(')');
+  expect('{');
   Vector *stmts = new_vector();
   while (!consume('}')) {
     vec_push(stmts, (void *)stmt());
@@ -79,9 +78,7 @@ Node *stmt() {
   if (consume(TK_FOR)) {
     node = malloc(sizeof(Node));
     node->ty = ND_FOR;
-    if (!consume('(')) {
-      error_at(tokens[pos].input, "'('ではないトークンです");
-    }
+    expect('(');
     char first_colon = ';';
     char second_colon = ';';
     if (tokens[pos].ty != first_colon) {
@@ -89,9 +86,7 @@ Node *stmt() {
     } else {
       node->init = NULL;
     }
-    if (!consume(first_colon)) {
-      error_at(tokens[pos].input, "';'ではないトークンです");
-    }
+    expect(first_colon);
     if (tokens[pos].ty != second_colon) {
       node->cond = expr();
     } else {

@@ -11,11 +11,15 @@ Function *code[100];
 char *user_input;
 Map *ident_map;
 
-void error_at(char *loc, char *msg) {
+void error_at(char *loc, char *fmt, ...) {
+  va_list ap;
+  va_start(ap, fmt);
   int pos = loc - user_input;
   fprintf(stderr, "%s\n", user_input);
   fprintf(stderr, "%*s", pos, ""); // pos個の空白を出力
-  fprintf(stderr, "^ %s\n", msg);
+  fprintf(stderr, "^ %s");
+  vfprintf(stderr, fmt, ap);
+  fprintf(stderr, "\n");
   exit(1);
 }
 
