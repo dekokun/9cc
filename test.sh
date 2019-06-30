@@ -51,6 +51,8 @@ try_fail() {
   fi
 }
 
+try 6 'foo() {a = 1; b = 5; return a + b;} main() {return foo();}'
+try 5 'foo() {return 2;} main() {return foo() + foo() + 1;}'
 try 6 'main() {return 6;}'
 try 7 'main() {a = foo_1(2); b = foo_2(2, 3); return a + b;}'
 try 2 'main() {return foo_1(2);}'
