@@ -1,4 +1,5 @@
 #include "9cc.h"
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -42,9 +43,11 @@ char *expect_ident() {
   return name;
 }
 
+bool at_eof() { return tokens[pos].ty == TK_EOF; }
+
 void program() {
   int i = 0;
-  while (tokens[pos].ty != TK_EOF)
+  while (!at_eof())
     code[i++] = function();
   code[i] = NULL;
 }
