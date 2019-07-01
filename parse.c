@@ -34,6 +34,14 @@ void expect(char ty) {
   pos++;
 }
 
+char *expect_ident() {
+  if (tokens[pos].ty != TK_IDENT)
+    error_at(tokens[pos].input, "TK_IDENTではありません");
+  char *name = tokens[pos].name;
+  pos++;
+  return name;
+}
+
 void program() {
   int i = 0;
   while (tokens[pos].ty != TK_EOF)
@@ -44,12 +52,7 @@ void program() {
 Function *function() {
   Function *function;
   function = malloc(sizeof(Function));
-  // ident関数を使うように共通化
-  if (tokens[pos].ty != TK_IDENT) {
-    error_at(tokens[pos].input, "関数であるべき場所が関数でありません");
-  }
-  function->name = tokens[pos].name;
-  pos++;
+  function->name = expect_ident();
 
   expect('(');
   // まずは引数なし関数定義のみ
