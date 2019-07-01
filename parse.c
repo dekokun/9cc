@@ -84,24 +84,24 @@ Node *stmt() {
     expect('(');
     char first_colon = ';';
     char second_colon = ';';
-    if (tokens[pos].ty != first_colon) {
+    if (!consume(first_colon)) {
       node->init = expr();
+      expect(first_colon);
     } else {
       node->init = NULL;
     }
-    expect(first_colon);
-    if (tokens[pos].ty != second_colon) {
+    if (!consume(second_colon)) {
       node->cond = expr();
+      expect(second_colon);
     } else {
       node->cond = NULL;
     }
-    expect(second_colon);
-    if (tokens[pos].ty != ')') {
+    if (!consume(')')) {
       node->iter_expr = expr();
+      expect(')');
     } else {
       node->iter_expr = NULL;
     }
-    expect(')');
     node->then = stmt();
     return node;
   }
