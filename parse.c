@@ -29,6 +29,14 @@ int consume(int ty) {
   return 1;
 }
 
+char *consume_ident() {
+  if (tokens[pos].ty != TK_IDENT)
+    return 0;
+  char *name = tokens[pos].name;
+  pos++;
+  return name;
+}
+
 void expect(char ty) {
   if (tokens[pos].ty != ty)
     error_at(tokens[pos].input, "'%c'ではありません", ty);
@@ -214,8 +222,8 @@ Node *unary() {
 Node *term() {
   if (tokens[pos].ty == TK_NUM)
     return new_node_num(tokens[pos++].val);
-  if (tokens[pos].ty == TK_IDENT) {
-    char *name = tokens[pos++].name;
+  char *name = consume_ident();
+  if (name) {
     if (!consume('(')) {
       // 変数
       return new_node_ident(name);
