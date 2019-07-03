@@ -29,6 +29,14 @@ int consume(int ty) {
   return 1;
 }
 
+int consume_number() {
+  if (tokens[pos].ty != TK_NUM)
+    return -1;
+  int val = tokens[pos].val;
+  pos++;
+  return val;
+}
+
 char *consume_ident() {
   if (tokens[pos].ty != TK_IDENT)
     return 0;
@@ -220,8 +228,9 @@ Node *unary() {
 }
 
 Node *term() {
-  if (tokens[pos].ty == TK_NUM)
-    return new_node_num(tokens[pos++].val);
+  int number = consume_number();
+  if (number != -1)
+    return new_node_num(number);
   char *name = consume_ident();
   if (name) {
     if (!consume('(')) {
