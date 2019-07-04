@@ -246,12 +246,10 @@ Node *term() {
     node->arguments = args;
     return node;
   }
-  if (consume('(')) {
-    Node *node = expr();
-    expect(')');
-    return node;
-  }
-  error_at(tokens[pos].input, "数値でも開きカッコでもないトークンです");
+  expect('(');
+  Node *node = expr();
+  expect(')');
+  return node;
 }
 
 Vector *arguments() {
