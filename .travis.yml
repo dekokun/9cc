@@ -1,3 +1,4 @@
+language: minimal
 before_install:
   - docker build -t 9cc .
 services:
