@@ -239,7 +239,6 @@ Node *term() {
     }
     // 関数呼び出し
     Vector *args = arguments();
-    expect(')');
     Node *node = malloc(sizeof(Node));
     node->ty = ND_FUNC_CALL;
     node->name = name;
@@ -253,10 +252,12 @@ Node *term() {
 }
 
 Vector *arguments() {
-  if (tokens[pos].ty == ')') {
+  if (consume(')')) {
     return new_vector();
   }
-  return non_empty_arguments();
+  Vector *result = non_empty_arguments();
+  expect(')');
+  return result;
 }
 Vector *non_empty_arguments() {
   Vector *args = new_vector();
