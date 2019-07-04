@@ -17,6 +17,11 @@ try() {
   input="$2"
 
   ./9cc "$input" >tmp.s
+  compile_result="$?"
+  if [ $compile_result != 0 ]; then
+      echo -e "$RED"compile failed$NC
+      exit
+  fi
   gcc -static -o tmp tmp.s test/*.o
   ./tmp
   actual="$?"
