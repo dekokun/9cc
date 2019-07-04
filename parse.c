@@ -1,4 +1,5 @@
 #include "9cc.h"
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -28,15 +29,41 @@ int consume(int ty) {
   return 1;
 }
 
+int consume_number() {
+  if (tokens[pos].ty != TK_NUM)
+    return -1;
+  int val = tokens[pos].val;
+  pos++;
+  return val;
+}
+
+char *consume_ident() {
+  if (tokens[pos].ty != TK_IDENT)
+    return 0;
+  char *name = tokens[pos].name;
+  pos++;
+  return name;
+}
+
 void expect(char ty) {
   if (tokens[pos].ty != ty)
     error_at(tokens[pos].input, "'%c'ではありません", ty);
   pos++;
 }
 
+char *expect_ident() {
+  if (tokens[pos].ty != TK_IDENT)
+    error_at(tokens[pos].input, "TK_IDENTではありません");
+  char *name = tokens[pos].name;
+  pos++;
+  return name;
+}
+
+bool at_eof() { return tokens[pos].ty == TK_EOF; }
+
 void program() {
   int i = 0;
-  while (tokens[pos].ty != TK_EOF)
+  while (!at_eof())
     code[i++] = function();
   code[i] = NULL;
 }
@@ -44,12 +71,7 @@ void program() {
 Function *function() {
   Function *function;
   function = malloc(sizeof(Function));
-  // ident関数を使うように共通化
-  if (tokens[pos].ty != TK_IDENT) {
-    error_at(tokens[pos].input, "関数であるべき場所が関数でありません");
-  }
-  function->name = tokens[pos].name;
-  pos++;
+  function->name = expect_ident();
 
   expect('(');
   // まずは引数なし関数定義のみ
@@ -81,24 +103,24 @@ Node *stmt() {
     expect('(');
     char first_colon = ';';
     char second_colon = ';';
-    if (tokens[pos].ty != first_colon) {
+    if (!consume(first_colon)) {
       node->init = expr();
+      expect(first_colon);
     } else {
       node->init = NULL;
     }
-    expect(first_colon);
-    if (tokens[pos].ty != second_colon) {
+    if (!consume(second_colon)) {
       node->cond = expr();
+      expect(second_colon);
     } else {
       node->cond = NULL;
     }
-    expect(second_colon);
-    if (tokens[pos].ty != ')') {
+    if (!consume(')')) {
       node->iter_expr = expr();
+      expect(')');
     } else {
       node->iter_expr = NULL;
     }
-    expect(')');
     node->then = stmt();
     return node;
   }
@@ -206,36 +228,36 @@ Node *unary() {
 }
 
 Node *term() {
-  if (tokens[pos].ty == TK_NUM)
-    return new_node_num(tokens[pos++].val);
-  if (tokens[pos].ty == TK_IDENT) {
-    char *name = tokens[pos++].name;
+  int number = consume_number();
+  if (number != -1)
+    return new_node_num(number);
+  char *name = consume_ident();
+  if (name) {
     if (!consume('(')) {
       // 変数
       return new_node_ident(name);
     }
     // 関数呼び出し
     Vector *args = arguments();
-    expect(')');
     Node *node = malloc(sizeof(Node));
     node->ty = ND_FUNC_CALL;
     node->name = name;
     node->arguments = args;
     return node;
   }
-  if (consume('(')) {
-    Node *node = expr();
-    expect(')');
-    return node;
-  }
-  error_at(tokens[pos].input, "数値でも開きカッコでもないトークンです");
+  expect('(');
+  Node *node = expr();
+  expect(')');
+  return node;
 }
 
 Vector *arguments() {
-  if (tokens[pos].ty == ')') {
+  if (consume(')')) {
     return new_vector();
   }
-  return non_empty_arguments();
+  Vector *result = non_empty_arguments();
+  expect(')');
+  return result;
 }
 Vector *non_empty_arguments() {
   Vector *args = new_vector();
