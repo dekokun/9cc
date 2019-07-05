@@ -14,7 +14,6 @@ Node *mul();
 Node *term();
 Vector *non_empty_arguments();
 Vector *arguments();
-void program_();
 Node *assign();
 Node *new_node_ident(char *name);
 Node *new_node_num(int val);
