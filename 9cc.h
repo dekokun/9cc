@@ -17,13 +17,18 @@ enum {
   TK_FOR,       // for
 };
 
+typedef struct Token Token;
 // トークンの型
-typedef struct {
-  int ty;      // トークンの型
+struct Token {
+  int ty; // トークンの型
+  Token *next;
   int val;     // tyがTK_NUMの時、その数値
   char *name;  // tyがTK_IDENTの場合、その名前
   char *input; // トークン文字列(エラーメッセージ用)
-} Token;
+};
+
+// current token
+Token *token;
 
 enum {
   ND_NUM = 256,
@@ -73,12 +78,11 @@ typedef struct {
   Vector *statements;
 } Function;
 
-extern Token tokens[];
 // 名前をfunctionsに
 extern Function *code[];
 extern Map *ident_map;
 
-void gen();
+void gen_func();
 void program();
 __attribute__((noreturn)) void error(char *fmt, ...);
 __attribute__((noreturn)) void error_at(char *loc, char *fmt, ...);

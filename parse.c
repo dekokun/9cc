@@ -19,51 +19,50 @@ Node *new_node_ident(char *name);
 Node *new_node_num(int val);
 Node *new_node(int op, Node *lhs, Node *rhs);
 
-int pos = 0;
-
 int consume(int ty) {
-  if (tokens[pos].ty != ty)
+  if (token->ty != ty)
     return 0;
-  pos++;
+  token = token->next;
   return 1;
 }
 
 int consume_number() {
-  if (tokens[pos].ty != TK_NUM)
+  if (token->ty != TK_NUM)
     return -1;
-  int val = tokens[pos].val;
-  pos++;
+  int val = token->val;
+  token = token->next;
   return val;
 }
 
 char *consume_ident() {
-  if (tokens[pos].ty != TK_IDENT)
+  if (token->ty != TK_IDENT)
     return 0;
-  char *name = tokens[pos].name;
-  pos++;
+  char *name = token->name;
+  token = token->next;
   return name;
 }
 
 void expect(char ty) {
-  if (tokens[pos].ty != ty)
-    error_at(tokens[pos].input, "'%c'ではありません", ty);
-  pos++;
+  if (token->ty != ty)
+    error_at(token->input, "'%c'ではありません", ty);
+  token = token->next;
 }
 
 char *expect_ident() {
-  if (tokens[pos].ty != TK_IDENT)
-    error_at(tokens[pos].input, "TK_IDENTではありません");
-  char *name = tokens[pos].name;
-  pos++;
+  if (token->ty != TK_IDENT)
+    error_at(token->input, "TK_IDENTではありません");
+  char *name = token->name;
+  token = token->next;
   return name;
 }
 
-bool at_eof() { return tokens[pos].ty == TK_EOF; }
+bool at_eof() { return token->ty == TK_EOF; }
 
 void program() {
   int i = 0;
-  while (!at_eof())
+  while (!at_eof()) {
     code[i++] = function();
+  }
   code[i] = NULL;
 }
 

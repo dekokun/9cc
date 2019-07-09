@@ -35,45 +35,47 @@ int is_alnum(char c) {
          ('0' <= c && c <= '9') || (c == '_');
 }
 
-void tokenize(char *p) {
-  int i = 0;
+// 新しいトークンを作成してcurに繋げる
+Token *new_token(int ty, Token *cur, char *input) {
+  Token *tok = calloc(1, sizeof(Token));
+  tok->ty = ty;
+  tok->input = input;
+  cur->next = tok;
+  return tok;
+}
+
+Token *tokenize(char *p) {
+  Token head;
+  head.next = NULL;
+  Token *cur = &head;
+
   while (*p) {
     if (isspace(*p)) {
       p++;
       continue;
     }
     if (strncmp(p, "return", 6) == 0 && !is_alnum(p[6])) {
-      tokens[i].ty = TK_RETURN;
-      tokens[i].input = p;
-      i++;
+      cur = new_token(TK_RETURN, cur, p);
       p += 6;
       continue;
     }
     if (strncmp(p, "else", 4) == 0 && !is_alnum(p[4])) {
-      tokens[i].ty = TK_ELSE;
-      tokens[i].input = p;
-      i++;
+      cur = new_token(TK_ELSE, cur, p);
       p += 4;
       continue;
     }
     if (strncmp(p, "while", 5) == 0 && !is_alnum(p[5])) {
-      tokens[i].ty = TK_WHILE;
-      tokens[i].input = p;
-      i++;
+      cur = new_token(TK_WHILE, cur, p);
       p += 5;
       continue;
     }
     if (strncmp(p, "for", 3) == 0 && !is_alnum(p[3])) {
-      tokens[i].ty = TK_FOR;
-      tokens[i].input = p;
-      i++;
+      cur = new_token(TK_FOR, cur, p);
       p += 3;
       continue;
     }
     if (strncmp(p, "if", 2) == 0 && !is_alnum(p[2])) {
-      tokens[i].ty = TK_IF;
-      tokens[i].input = p;
-      i++;
+      cur = new_token(TK_IF, cur, p);
       p += 2;
       continue;
     }
@@ -83,88 +85,66 @@ void tokenize(char *p) {
       do {
         j++;
       } while (is_alnum(p[j]));
-      tokens[i].ty = TK_IDENT;
-      tokens[i].input = p;
-      tokens[i].name = strndup(p, j);
-      i++;
+      cur = new_token(TK_IDENT, cur, p);
+      cur->name = strndup(p, j);
       p += j;
       continue;
     }
     if (strncmp(p, "==", 2) == 0) {
-      tokens[i].ty = TK_EQ;
-      tokens[i].input = p;
-      i++;
+      cur = new_token(TK_EQ, cur, p);
       p += 2;
       continue;
     }
     if (strncmp(p, "!=", 2) == 0) {
-      tokens[i].ty = TK_NE;
-      tokens[i].input = p;
-      i++;
+      cur = new_token(TK_NE, cur, p);
       p += 2;
       continue;
     }
     if (strncmp(p, "<=", 2) == 0) {
-      tokens[i].ty = TK_LE;
-      tokens[i].input = p;
-      i++;
+      cur = new_token(TK_LE, cur, p);
       p += 2;
       continue;
     }
     if (strncmp(p, ">=", 2) == 0) {
-      tokens[i].ty = TK_GE;
-      tokens[i].input = p;
-      i++;
+      cur = new_token(TK_GE, cur, p);
       p += 2;
       continue;
     }
     if (*p == '{') {
-      tokens[i].ty = *p;
-      tokens[i].input = p;
-      i++;
+      cur = new_token(*p, cur, p);
       p++;
       continue;
     }
     if (*p == '}') {
-      tokens[i].ty = *p;
-      tokens[i].input = p;
-      i++;
+      cur = new_token(*p, cur, p);
       p++;
       continue;
     }
     if (*p == '<') {
-      tokens[i].ty = TK_LT;
-      tokens[i].input = p;
-      i++;
+      cur = new_token(TK_LT, cur, p);
       p++;
       continue;
     }
     if (*p == '>') {
-      tokens[i].ty = TK_GT;
-      tokens[i].input = p;
-      i++;
+      cur = new_token(TK_GT, cur, p);
       p++;
       continue;
     }
     if (*p == '+' || *p == '-' || *p == '*' || *p == '/' || *p == '(' ||
         *p == ')' || *p == '=' || *p == ';' || *p == ',') {
-      tokens[i].ty = *p;
-      tokens[i].input = p;
-      i++;
+      cur = new_token(*p, cur, p);
       p++;
       continue;
     }
     if (isdigit(*p)) {
-      tokens[i].ty = TK_NUM;
-      tokens[i].input = p;
-      tokens[i].val = strtol(p, &p, 10);
-      i++;
+      cur = new_token(TK_NUM, cur, p);
+      cur->val = strtol(p, &p, 10);
       continue;
     }
     error_at(p, "トークナイズできません");
   }
-  tokens[i].ty = TK_EOF;
-  tokens[i].input = p;
+  cur = new_token(TK_EOF, cur, p);
+  return head.next;
 }
 // エラーを報告するための関数
 __attribute__((noreturn)) void error(char *fmt, ...) {
@@ -194,9 +174,9 @@ int main(int argc, char **argv) {
   }
   user_input = argv[1];
   ident_map = new_map();
-  tokenize(user_input);
-  program();
+  token = tokenize(user_input);
 
+  program();
   printf(".intel_syntax noprefix\n");
   printf(".global main\n");
   for (int i = 0; code[i]; i++) {
