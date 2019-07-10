@@ -6,7 +6,6 @@
 #include <string.h>
 
 // トークナイズした結果のトークン列はこの配列に保存する
-Token tokens[1000];
 Function *code[100];
 char *user_input;
 Map *ident_map;
