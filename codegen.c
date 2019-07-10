@@ -1,6 +1,7 @@
 #include "9cc.h"
 #include <stdio.h>
 
+void gen();
 int label_num = 0;
 
 void gen_lval(Node *node) {
