@@ -19,27 +19,28 @@ Node *new_node_ident(char *name);
 Node *new_node_num(int val);
 Node *new_node(int op, Node *lhs, Node *rhs);
 
-int consume(int ty) {
+Token *consume(int ty) {
   if (token->ty != ty)
-    return 0;
+    return NULL;
+  Token *before = token;
   token = token->next;
-  return 1;
+  return before;
 }
 
-int consume_number() {
+Token *consume_number() {
   if (token->ty != TK_NUM)
-    return -1;
-  int val = token->val;
+    return NULL;
+  Token *before = token;
   token = token->next;
-  return val;
+  return before;
 }
 
-char *consume_ident() {
+Token *consume_ident() {
   if (token->ty != TK_IDENT)
     return 0;
-  char *name = token->name;
+  Token *before = token;
   token = token->next;
-  return name;
+  return before;
 }
 
 void expect(char ty) {
@@ -226,20 +227,21 @@ Node *unary() {
 }
 
 Node *term() {
-  int number = consume_number();
-  if (number != -1)
-    return new_node_num(number);
-  char *name = consume_ident();
-  if (name) {
+  Token *tok = consume_number();
+  if (tok) {
+    return new_node_num(tok->val);
+  }
+  Token *tok2 = consume_ident();
+  if (tok2) {
     if (!consume('(')) {
       // 変数
-      return new_node_ident(name);
+      return new_node_ident(tok2->name);
     }
     // 関数呼び出し
     Vector *args = arguments();
     Node *node = malloc(sizeof(Node));
     node->ty = ND_FUNC_CALL;
-    node->name = name;
+    node->name = tok2->name;
     node->arguments = args;
     return node;
   }
