@@ -231,17 +231,17 @@ Node *term() {
   if (tok) {
     return new_node_num(tok->val);
   }
-  Token *tok2 = consume_ident();
-  if (tok2) {
+  Token *tok_ident = consume_ident();
+  if (tok_ident) {
     if (!consume('(')) {
       // 変数
-      return new_node_ident(tok2->name);
+      return new_node_ident(tok_ident->name);
     }
     // 関数呼び出し
     Vector *args = arguments();
     Node *node = malloc(sizeof(Node));
     node->ty = ND_FUNC_CALL;
-    node->name = tok2->name;
+    node->name = tok_ident->name;
     node->arguments = args;
     return node;
   }
