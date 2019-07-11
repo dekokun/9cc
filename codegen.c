@@ -5,7 +5,7 @@ void gen();
 int label_num = 0;
 
 void gen_lval(Node *node) {
-  if (node->ty != ND_IDENT) {
+  if (node->ty != ND_LVAR) {
     error("代入の左辺値が変数ではありません");
   }
   printf("  mov rax, rbp\n");
@@ -134,7 +134,7 @@ void gen(Node *node) {
     printf("  push rax\n");
     return;
   }
-  if (node->ty == ND_IDENT) {
+  if (node->ty == ND_LVAR) {
     gen_lval(node);
     printf("  pop rax\n");
     printf("  mov rax, [rax]\n");

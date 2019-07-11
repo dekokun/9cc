@@ -299,7 +299,7 @@ Node *new_node_ident(char *name) {
     map_put(ident_map, name, (void *)(map_len(ident_map)));
   }
   Node *node = malloc(sizeof(Node));
-  node->ty = ND_IDENT;
+  node->ty = ND_LVAR;
   node->name = name;
   return node;
 }

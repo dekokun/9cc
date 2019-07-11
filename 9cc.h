@@ -32,7 +32,7 @@ Token *token;
 
 enum {
   ND_NUM = 256,
-  ND_IDENT,
+  ND_LVAR,
   ND_EQ,        // equal
   ND_NE,        // not equal
   ND_LE,        // less than or equal
@@ -62,7 +62,7 @@ typedef struct Node { // 宣言の中でNodeを使ってるのでタグ名Node�
   struct Node *lhs;
   struct Node *rhs;
   int val;           // tyがND_NUMの場合のみ使う
-  char *name;        // tyがND_IDENTの場合のみ使う
+  char *name;        // tyがND_LVAR, ND_FUNC_CALLの場合のみ使う
   struct Node *cond; // tyがND_IF/ND_IF_ELSE/ND_WHILE/ND_IFの場合のみ使う
   struct Node *then; // tyがND_IF/ND_IF_ELSE/ND_WHILE/ND_FORの場合のみ使う
   struct Node *els;       // tyがND_IF_ELSEの場合のみ使う
