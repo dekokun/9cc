@@ -70,6 +70,7 @@ typedef struct Node { // 宣言の中でNodeを使ってるのでタグ名Node�
   struct Node *iter_expr; // tyがND_FORの場合のみ使う
   Vector *statements;     // tyがND_BLOCKの場合
   Vector *arguments;      // tyがND_FUNC_CALLの場合
+  int offset;
 } Node;
 
 typedef struct {

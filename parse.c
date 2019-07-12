@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 Function *function();
 Node *stmt();
@@ -295,11 +296,24 @@ void node_debug(Node *node) {
 }
 
 Node *new_node_ident(char *name) {
-  if (map_get(ident_map, name) == NULL) {
-    map_put(ident_map, name, (void *)(map_len(ident_map)));
+  int offset = (int)map_get(ident_map, name);
+  if (!offset) {
+    offset = (map_len(ident_map) + 1) * 8;
+    map_put(ident_map, name, (void *)offset);
   }
   Node *node = malloc(sizeof(Node));
   node->ty = ND_LVAR;
   node->name = name;
+  node->offset = offset;
   return node;
+}
+
+// 変数を名前で検索する。見つからなかった場合はNULLを返す
+LVar *find_lvar(Token *tok) {
+  for (LVar *var = locals; var; var = var->next) {
+    if (strcmp(var->name, tok->name) != 0) {
+      return var;
+    }
+  }
+  return NULL;
 }
