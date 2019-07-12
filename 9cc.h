@@ -79,6 +79,15 @@ typedef struct {
   Vector *statements;
 } Function;
 
+typedef struct LVar LVar;
+struct LVar {
+  LVar *next; // 次の変数かNULL
+  char *name; // 変数の名前
+  int offset; // RBPからのオフセット
+};
+
+LVar *locals;
+
 // 名前をfunctionsに
 extern Function *code[];
 extern Map *ident_map;
