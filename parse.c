@@ -16,7 +16,7 @@ Node *term();
 Vector *non_empty_arguments();
 Vector *arguments();
 Node *assign();
-Node *new_node_ident(char *name);
+Node *new_node_ident(Token *tok);
 Node *new_node_num(int val);
 Node *new_node(int op, Node *lhs, Node *rhs);
 
@@ -236,7 +236,7 @@ Node *term() {
   if (tok_ident) {
     if (!consume('(')) {
       // 変数
-      return new_node_ident(tok_ident->name);
+      return new_node_ident(tok_ident);
     }
     // 関数呼び出し
     Vector *args = arguments();
@@ -295,19 +295,6 @@ void node_debug(Node *node) {
   // printf("name: %c\n", node->name);
 }
 
-Node *new_node_ident(char *name) {
-  int offset = (int)map_get(ident_map, name);
-  if (!offset) {
-    offset = (map_len(ident_map) + 1) * 8;
-    map_put(ident_map, name, (void *)offset);
-  }
-  Node *node = malloc(sizeof(Node));
-  node->ty = ND_LVAR;
-  node->name = name;
-  node->offset = offset;
-  return node;
-}
-
 // 変数を名前で検索する。見つからなかった場合はNULLを返す
 LVar *find_lvar(Token *tok) {
   for (LVar *var = locals; var; var = var->next) {
@@ -316,4 +303,26 @@ LVar *find_lvar(Token *tok) {
     }
   }
   return NULL;
+}
+Node *new_node_ident(Token *tok) {
+  LVar *lvar = find_lvar(tok);
+  Node *node = malloc(sizeof(Node));
+  node->ty = ND_LVAR;
+  node->name = tok->name;
+  if (!lvar) {
+    int new_offset;
+    if (locals) {
+      new_offset = locals->offset + 8;
+    } else {
+      new_offset = 0;
+    }
+
+    lvar = malloc(sizeof(LVar) * 8);
+    lvar->next = locals;
+    lvar->name = tok->name;
+    lvar->offset = new_offset;
+    locals = lvar;
+  }
+  node->offset = lvar->offset;
+  return node;
 }
