@@ -171,6 +171,11 @@ int main(int argc, char **argv) {
     runtest();
     return 0;
   }
+  // debug output
+  bool debug_flag = false;
+  if (strcmp(argv[1], "-debug") == 0) {
+    debug_flag = false;
+  }
   user_input = argv[1];
   ident_map = new_map();
   token = tokenize(user_input);

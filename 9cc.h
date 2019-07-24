@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #define _XOPEN_SOURCE 700
 // トークンの型を表す値
 enum {
@@ -81,6 +82,7 @@ typedef struct {
 // 名前をfunctionsに
 extern Function *code[];
 extern Map *ident_map;
+extern bool debug_flag;
 
 void gen_func();
 void program();
