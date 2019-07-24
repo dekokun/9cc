@@ -9,6 +9,7 @@
 Function *code[100];
 char *user_input;
 Map *ident_map;
+bool debug_flag;
 
 void error_at(char *loc, char *fmt, ...) {
   va_list ap;
@@ -160,6 +161,15 @@ void logging(char *fmt, ...) {
   vfprintf(stderr, fmt, ap);
   fprintf(stderr, "\n");
 }
+void log_debug(char *fmt, ...) {
+  if (!debug_flag) {
+    return;
+  }
+  va_list ap;
+  va_start(ap, fmt);
+  vfprintf(stderr, fmt, ap);
+  fprintf(stderr, "\n");
+}
 
 int main(int argc, char **argv) {
   if (argc != 2) {
@@ -172,15 +182,18 @@ int main(int argc, char **argv) {
     return 0;
   }
   // debug output
-  bool debug_flag = false;
+  debug_flag = false;
   if (strcmp(argv[1], "-debug") == 0) {
     debug_flag = false;
   }
   user_input = argv[1];
   ident_map = new_map();
+  log_debug("start tokenize");
   token = tokenize(user_input);
 
+  log_debug("start program");
   program();
+  log_debug("start gen");
   printf(".intel_syntax noprefix\n");
   printf(".global main\n");
   for (int i = 0; code[i]; i++) {
