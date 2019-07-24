@@ -298,7 +298,7 @@ void node_debug(Node *node) {
 // 変数を名前で検索する。見つからなかった場合はNULLを返す
 LVar *find_lvar(Token *tok) {
   for (LVar *var = locals; var; var = var->next) {
-    if (strcmp(var->name, tok->name) != 0) {
+    if (strcmp(var->name, tok->name) == 0) {
       return var;
     }
   }
