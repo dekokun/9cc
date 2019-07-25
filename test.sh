@@ -7,6 +7,10 @@ case "$1" in
   verbose=1
   shift
   ;;
+-d | --d | --debug | -debug)
+  debug=1
+  shift
+  ;;
 esac
 
 RED='\033[0;31m'
@@ -15,8 +19,11 @@ NC='\033[0m'
 try() {
   expected="$1"
   input="$2"
-
-  ./9cc "$input" >tmp.s
+    if [ "$debug" = 1 ]; then
+        ./9cc "$input" >tmp.s
+    else
+        ./9cc -debug "$input" >tmp.s
+    fi
   compile_result="$?"
   if [ $compile_result != 0 ]; then
       echo -e "${RED}compile failed{$NC}"
