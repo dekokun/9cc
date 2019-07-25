@@ -18,6 +18,11 @@ test-verbose: 9cc
 	./9cc -test
 	./test.sh -v
 
+.PHONY: test-debug
+test-debug: 9cc
+	./9cc -test
+	./test.sh -v -debug
+
 .PHONY: clean
 clean:
 	rm -f 9cc *.o *~ tmp*
