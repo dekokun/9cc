@@ -172,10 +172,6 @@ void log_debug(char *fmt, ...) {
 }
 
 int main(int argc, char **argv) {
-  if (argc != 2) {
-    fprintf(stderr, "引数の個数が正しくありません\n");
-    return 1;
-  }
   // テスト実行
   if (strcmp(argv[1], "-test") == 0) {
     runtest();
@@ -184,9 +180,11 @@ int main(int argc, char **argv) {
   // debug output
   debug_flag = false;
   if (strcmp(argv[1], "-debug") == 0) {
-    debug_flag = false;
+    debug_flag = true;
+    user_input = argv[2];
+  } else {
+    user_input = argv[1];
   }
-  user_input = argv[1];
   ident_map = new_map();
   log_debug("start tokenize");
   token = tokenize(user_input);
