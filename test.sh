@@ -3,6 +3,8 @@
 verbose=
 debug=
 
+while [[ $# -gt 0 ]]
+do
 case "$1" in
 -v | --v | --ve | --ver | --verb | --verbo | --verbos | --verbose)
   verbose=1
@@ -13,6 +15,8 @@ case "$1" in
   shift
   ;;
 esac
+done
+
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
