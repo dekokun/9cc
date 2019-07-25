@@ -1,6 +1,7 @@
 #!/bin/bash
 
 verbose=
+debug=
 
 case "$1" in
 -v | --v | --ve | --ver | --verb | --verbo | --verbos | --verbose)
@@ -20,9 +21,9 @@ try() {
   expected="$1"
   input="$2"
     if [ "$debug" = 1 ]; then
-        ./9cc "$input" >tmp.s
-    else
         ./9cc -debug "$input" >tmp.s
+    else
+        ./9cc "$input" >tmp.s
     fi
   compile_result="$?"
   if [ $compile_result != 0 ]; then
