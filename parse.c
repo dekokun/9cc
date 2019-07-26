@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 Function *function();
 Node *stmt();
@@ -15,31 +16,32 @@ Node *term();
 Vector *non_empty_arguments();
 Vector *arguments();
 Node *assign();
-Node *new_node_ident(char *name);
+Node *new_node_ident(Token *tok);
 Node *new_node_num(int val);
 Node *new_node(int op, Node *lhs, Node *rhs);
 
-int consume(int ty) {
+Token *consume(int ty) {
   if (token->ty != ty)
-    return 0;
+    return NULL;
+  Token *before = token;
   token = token->next;
-  return 1;
+  return before;
 }
 
-int consume_number() {
+Token *consume_number() {
   if (token->ty != TK_NUM)
-    return -1;
-  int val = token->val;
+    return NULL;
+  Token *before = token;
   token = token->next;
-  return val;
+  return before;
 }
 
-char *consume_ident() {
+Token *consume_ident() {
   if (token->ty != TK_IDENT)
     return 0;
-  char *name = token->name;
+  Token *before = token;
   token = token->next;
-  return name;
+  return before;
 }
 
 void expect(char ty) {
@@ -226,20 +228,21 @@ Node *unary() {
 }
 
 Node *term() {
-  int number = consume_number();
-  if (number != -1)
-    return new_node_num(number);
-  char *name = consume_ident();
-  if (name) {
+  Token *tok = consume_number();
+  if (tok) {
+    return new_node_num(tok->val);
+  }
+  Token *tok_ident = consume_ident();
+  if (tok_ident) {
     if (!consume('(')) {
       // 変数
-      return new_node_ident(name);
+      return new_node_ident(tok_ident);
     }
     // 関数呼び出し
     Vector *args = arguments();
     Node *node = malloc(sizeof(Node));
     node->ty = ND_FUNC_CALL;
-    node->name = name;
+    node->name = tok_ident->name;
     node->arguments = args;
     return node;
   }
@@ -292,12 +295,34 @@ void node_debug(Node *node) {
   // printf("name: %c\n", node->name);
 }
 
-Node *new_node_ident(char *name) {
-  if (map_get(ident_map, name) == NULL) {
-    map_put(ident_map, name, (void *)(map_len(ident_map)));
+// 変数を名前で検索する。見つからなかった場合はNULLを返す
+LVar *find_lvar(Token *tok) {
+  for (LVar *var = locals; var; var = var->next) {
+    if (strcmp(var->name, tok->name) == 0) {
+      return var;
+    }
   }
+  return NULL;
+}
+Node *new_node_ident(Token *tok) {
+  LVar *lvar = find_lvar(tok);
   Node *node = malloc(sizeof(Node));
-  node->ty = ND_IDENT;
-  node->name = name;
+  node->ty = ND_LVAR;
+  node->name = tok->name;
+  if (!lvar) {
+    int new_offset;
+    if (locals) {
+      new_offset = locals->offset + 8;
+    } else {
+      new_offset = 0;
+    }
+
+    lvar = malloc(sizeof(LVar) * 8);
+    lvar->next = locals;
+    lvar->name = tok->name;
+    lvar->offset = new_offset;
+    locals = lvar;
+  }
+  node->offset = lvar->offset;
   return node;
 }

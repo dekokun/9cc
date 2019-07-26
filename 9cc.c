@@ -195,8 +195,10 @@ int main(int argc, char **argv) {
   printf(".intel_syntax noprefix\n");
   printf(".global main\n");
   for (int i = 0; code[i]; i++) {
+    log_debug("start gen_func: %s", code[i]->name);
     gen_func(code[i]);
   }
 
+  log_debug("all done");
   return 0;
 }

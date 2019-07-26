@@ -5,11 +5,11 @@ void gen();
 int label_num = 0;
 
 void gen_lval(Node *node) {
-  if (node->ty != ND_IDENT) {
+  if (node->ty != ND_LVAR) {
     error("代入の左辺値が変数ではありません");
   }
   printf("  mov rax, rbp\n");
-  printf("  sub rax, %d\n", (int)map_get(ident_map, node->name) * 8);
+  printf("  sub rax, %d\n", node->offset);
   printf("  push rax\n");
   return;
 }
@@ -20,7 +20,7 @@ void gen_func(Function *function) {
   // 変数26個分の領域を確保する
   printf("  push rbp\n");
   printf("  mov rbp, rsp\n");
-  printf("  sub rsp, %d\n", map_len(ident_map) * 8);
+  printf("  sub rsp, %d\n", locals->offset + 8);
   for (int i = 0; i < function->statements->len; i++) {
     gen((Node *)function->statements->data[i]);
     // 式の評価結果としてスタックに一つの値が残っている
@@ -134,7 +134,7 @@ void gen(Node *node) {
     printf("  push rax\n");
     return;
   }
-  if (node->ty == ND_IDENT) {
+  if (node->ty == ND_LVAR) {
     gen_lval(node);
     printf("  pop rax\n");
     printf("  mov rax, [rax]\n");
