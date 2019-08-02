@@ -122,6 +122,21 @@ void gen(Node *node) {
   }
 
   if (node->ty == ND_FUNC_CALL) {
+    // RSP 16bit align
+    int _label_num = label_num;
+    label_num += 1;
+    printf("  mov rax, rsp\n");
+    printf("  mov rdi, 16\n");
+    // extend rax -> rax, rdx
+    printf("  cqo\n");
+    printf("  idiv rdi\n");
+    // reminder: rdx
+    printf("  cmp rdx, 0\n");
+    printf("  je  .Lalign%d\n", _label_num);
+    // not 16byte align
+    // write align code here
+    // printf("  add rsp, 8\n");
+    printf("  .Lalign%d:\n", _label_num);
     Vector *arguments = node->arguments;
     // 第1引数～第6引数まで RDI, RSI, RDX, RCX, R8, R9 を順に使用
     char *registers[6] = {"RDI", "RSI", "RDX", "RCX", "R8", "R9"};
